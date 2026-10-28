@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深空当铺 · PROBABLY STOLEN</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080e; --panel:#12141d; --panel2:#161a24;
+  --line:#252b3a; --line2:#343d52;
+  --ink:#c9d3e0; --dim:#6d7889; --dim2:#4b5464;
+  --cyan:#42e8d4; --magenta:#ff4f9a; --amber:#ffbe4d; --red:#ff5b4d; --green:#6ee7a0;
+  --font:"Consolas","Cascadia Mono","Courier New","Microsoft YaHei",monospace;
+}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(900px 520px at 15% -10%,rgba(66,232,212,.09),transparent 60%),
+    radial-gradient(760px 460px at 92% 6%,rgba(255,79,154,.08),transparent 60%),
+    radial-gradient(600px 500px at 50% 110%,rgba(255,190,77,.05),transparent 60%),
+    var(--bg);
+  color:var(--ink);font-family:var(--font);font-size:13px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);
+  opacity:.45;mix-blend-mode:multiply;
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:998;
+  background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.65) 100%);
+}
+.wrap{max-width:1240px;margin:0 auto;padding:14px 14px 40px;position:relative;z-index:2}
+/* ---------- top ---------- */
+.topbar{
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+  border:1px solid var(--line);background:linear-gradient(180deg,#141824,#0d1017);
+  padding:10px 14px;position:relative;
+}
+.topbar::after{content:"";position:absolute;left:0;bottom:-1px;width:100%;height:1px;
+  background:linear-gradient(90deg,var(--cyan),transparent 40%,transparent 60%,var(--magenta));opacity:.6}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand b{font-size:19px;letter-spacing:.18em;color:#eaf4ff;
+  text-shadow:0 0 14px rgba(66,232,212,.45),0 2px 0 rgba(0,0,0,.8)}
+.brand span{font-size:9px;letter-spacing:.28em;color:var(--dim2)}
+.stats{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.stat{display:flex;flex-direction:column;gap:2px;padding:4px 10px;border-left:1px solid var(--line2);min-width:64px}
+.stat .k{font-size:9px;letter-spacing:.18em;color:var(--dim2)}
+.stat b{font-size:14px;color:#e6f0ff;font-weight:600}
+.stat b.warn{color:var(--red)}
+.heatbar{width:78px;height:7px;background:#1b1f2b;border:1px solid var(--line2);margin-top:4px;position:relative;overflow:hidden}
+.heatbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2fbfae,#ffbe4d 55%,#ff4f6d);
+  transition:width .35s ease}
+.reps{display:flex;gap:6px;flex-wrap:wrap}
+.rep{font-size:10px;padding:2px 7px;border:1px solid var(--line2);color:var(--dim);background:#0f121a}
+.rep b{color:#dfe8f5;font-size:11px}
+.rep.g{border-color:#2b5a9c;color:#8dc0ff}
+.rep.r{border-color:#96305c;color:#ff9dc4}
+.rep.b{border-color:#5f7130;color:#c4dd82}
+/* ---------- layout ---------- */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:12px;margin-top:12px}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.stat b{white-space:nowrap}
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .stocklist{max-height:none}
+  #p-log .lb{max-height:none}
+  .topbar{gap:10px}
+  .stats{width:100%;gap:6px}
+  .stat{flex:1 1 0;min-width:0;padding:4px 6px}
+}
+@media (max-width:560px){
+  .brand span{display:none}
+  .brand b{font-size:16px}
+  .cust-art{width:64px;height:64px}
+  .cust-art svg{width:58px;height:58px}
+  .cust-line{font-size:11.5px}
+  .bench-art svg{width:84px;height:84px}
+}
+.panel{
+  background:linear-gradient(180deg,#131620,#0e1118);
+  border:1px solid var(--line);position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 6px 18px rgba(0,0,0,.35);
+}
+.panel::before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;
+  background:linear-gradient(90deg,var(--cyan),rgba(66,232,212,.05) 42%,rgba(255,79,154,.05) 60%,var(--magenta));opacity:.55}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:9px 12px;border-bottom:1px solid var(--line);
+  font-size:10px;letter-spacing:.2em;color:var(--dim)}
+.ph-r{color:var(--dim2);letter-spacing:.1em}
+.pb{padding:12px}
+/* ---------- buttons ---------- */
+.btn{
+  font:inherit;font-size:12px;color:var(--ink);background:#1a2030;border:1px solid var(--line2);
+  padding:8px 13px;cursor:pointer;letter-spacing:.04em;transition:.14s;position:relative;
+}
+.btn:hover:not(:disabled){border-color:var(--cyan);color:#eaffff;box-shadow:0 0 14px rgba(66,232,212,.22)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn:disabled{opacity:.32;cursor:not-allowed}
+.btn.primary{background:#0e3335;border-color:#2f9b95;color:#a9fff2}
+.btn.primary:hover:not(:disabled){background:#14484a;box-shadow:0 0 18px rgba(66,232,212,.3)}
+.btn.danger{background:#2f1116;border-color:#8a3742;color:#ffb3b3}
+.btn.danger:hover:not(:disabled){border-color:var(--red);box-shadow:0 0 14px rgba(255,91,77,.25)}
+.btn.ghost{background:transparent;color:var(--dim)}
+.btn.sm{padding:4px 9px;font-size:11px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+/* ---------- counter idle ---------- */
+.idle{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 12px 26px;text-align:center}
+.idle p{color:var(--dim);font-size:12px;max-width:520px}
+.idle .big{font-size:13px;color:#dbe6f5;letter-spacing:.08em}
+.shop-sign{font-size:10px;letter-spacing:.32em;color:var(--dim2);border:1px dashed var(--line2);padding:5px 12px}
+/* ---------- customer ---------- */
+.cust{display:flex;gap:12px;padding:12px;border-bottom:1px solid var(--line);background:#101420}
+.cust-art{width:86px;height:86px;flex:0 0 auto;background:
+  radial-gradient(circle at 50% 40%,rgba(66,232,212,.08),transparent 70%),#0b0e15;
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.cust-art svg{width:80px;height:80px}
+.cust-info{min-width:0;flex:1}
+.cust-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cust-name{font-size:15px;color:#eef5ff;letter-spacing:.04em}
+.cust-line{margin-top:8px;color:#aab7c9;font-size:12px;line-height:1.7;font-style:italic}
+.cust-meta{margin-top:8px;font-size:10px;color:var(--dim);letter-spacing:.08em}
+.cust-meta b{color:var(--amber);font-weight:600}
+.tag{font-size:9px;letter-spacing:.12em;padding:1px 6px;border:1px solid var(--line2);color:var(--dim);white-space:nowrap}
+.tag.t-drifter{border-color:#4a5364;color:#a7b3c4}
+.tag.t-scav{border-color:#5f7130;color:#c4dd82}
+.tag.t-thief{border-color:#96305c;color:#ff9dc4}
+.tag.t-officer{border-color:#2b5a9c;color:#8dc0ff}
+.tag.t-rebel{border-color:#932f2f;color:#ff9a8f}
+.tag.t-aug{border-color:#2f9b95;color:#8ff7e9;background:rgba(66,232,212,.08)}
+.tag.real{border-color:#2c7a4c;color:#7ce0a1}
+.tag.fake{border-color:#932f2f;color:#ff9a8f;background:rgba(147,47,47,.14)}
+.tag.stolen{border-color:#9a731c;color:#ffd479}
+.tag.ill{border-color:#6d8a1e;color:#c9ec74}
+.tag.live{border-color:#2f9b95;color:#8ff7e9}
+/* ---------- bench ---------- */
+.bench{display:grid;grid-template-columns:132px minmax(0,1fr);gap:14px;padding:12px;background:#0c0f16;border-bottom:1px solid var(--line)}
+@media (max-width:560px){.bench{grid-template-columns:1fr}}
+.bench-art{position:relative;background:
+  radial-gradient(circle at 50% 35%,rgba(255,190,77,.07),transparent 65%),#080b11;
+  border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;
+  padding:10px;overflow:hidden}
+.bench-art::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,rgba(255,255,255,.06),transparent 42%);pointer-events:none}
+.bench-art svg{width:104px;height:104px;image-rendering:pixelated;filter:drop-shadow(0 4px 10px rgba(0,0,0,.7))}
+.bench-name{font-size:14px;color:#eaf3ff}
+.bench-desc{font-size:11px;color:var(--dim);margin-top:6px;line-height:1.6}
+.clue-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font:inherit;font-size:10px;letter-spacing:.06em;padding:4px 8px;background:#151b27;
+  border:1px solid var(--line2);color:#93a1b6;cursor:pointer}
+.chip:hover:not(:disabled){border-color:var(--cyan);color:#cffff8}
+.chip:disabled{opacity:.45;cursor:default;color:#5d6a7c}
+.clue-list{display:flex;flex-direction:column;gap:7px;padding:10px 12px}
+.clue{display:flex;gap:9px;align-items:flex-start;border-left:2px solid var(--line2);
+  background:#0f131d;padding:7px 9px;font-size:11px;color:#b3c0d1;line-height:1.6}
+.clue.good{border-left-color:#2c7a4c}
+.clue.bad{border-left-color:#932f2f}
+.clue.warn{border-left-color:#9a731c}
+.clue-t{color:#dbe6f5;font-size:10px;letter-spacing:.12em;margin-bottom:2px}
+.clue-vis{width:42px;height:42px;flex:0 0 auto;border:1px solid var(--line2);background:#080b11;
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* ---------- negotiation ---------- */
+.nego{padding:12px;background:#101420;border-top:1px solid var(--line)}
+.nego-top{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);letter-spacing:.08em}
+.nego-top b{color:var(--amber);font-size:14px}
+.counter-note{margin-top:6px;font-size:11px;color:#ff9dc4;border:1px dashed #6c2b45;background:rgba(147,47,92,.1);padding:5px 8px}
+input[type=range]{width:100%;margin:12px 0 4px;-webkit-appearance:none;appearance:none;height:4px;background:#222a3a;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:18px;background:var(--cyan);
+  border:1px solid #0a0f14;cursor:pointer;box-shadow:0 0 10px rgba(66,232,212,.6)}
+input[type=range]::-moz-range-thumb{width:14px;height:18px;background:var(--cyan);border:1px solid #0a0f14;cursor:pointer}
+.price-line{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--dim)}
+.price-line b{font-size:18px;color:var(--cyan);letter-spacing:.02em}
+.pat{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:10px;color:var(--dim2)}
+.pat i{display:block;width:16px;height:6px;background:#2a3244}
+.pat i.f{background:var(--cyan);box-shadow:0 0 6px rgba(66,232,212,.5)}
+.pat i.low{background:var(--red)}
+/* ---------- picker ---------- */
+.picklist{display:flex;flex-direction:column;gap:6px;padding:12px}
+.pickrow{display:flex;align-items:center;gap:10px;border:1px solid var(--line2);background:#111622;padding:6px 8px;cursor:pointer}
+.pickrow:hover{border-color:var(--cyan);background:#16202a}
+.pickrow.sel{border-color:var(--amber);box-shadow:0 0 0 1px rgba(255,190,77,.3)}
+.pickrow svg{width:34px;height:34px}
+.pickrow .nm{font-size:12px;color:#dbe6f5}
+.pickrow .meta{font-size:10px;color:var(--dim2);margin-left:auto;text-align:right}
+/* ---------- deal ---------- */
+.deal{padding:22px 14px;text-align:center}
+.deal h3{font-size:14px;letter-spacing:.18em;color:var(--cyan);margin-bottom:10px}
+.deal p{font-size:12px;color:#b3c0d1;line-height:1.8;max-width:520px;margin:0 auto}
+.reveal{display:inline-block;margin-top:12px;border:1px solid var(--line2);padding:8px 14px;background:#0d1119;font-size:11px;letter-spacing:.06em}
+/* ---------- side stock ---------- */
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tab{flex:1;text-align:center;padding:8px 4px;font-size:10px;letter-spacing:.12em;color:var(--dim);
+  cursor:pointer;border-right:1px solid var(--line);background:#0e1119}
+.tab:last-child{border-right:0}
+.tab.on{color:#cffff8;background:#101b20;box-shadow:inset 0 -2px 0 var(--cyan)}
+.tab small{display:block;font-size:9px;color:var(--dim2);letter-spacing:.05em}
+.stocklist{max-height:330px;overflow-y:auto;padding:8px}
+.stocklist::-webkit-scrollbar{width:6px}
+.stocklist::-webkit-scrollbar-thumb{background:#2b3346}
+.srow{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;align-items:center;
+  padding:6px;border:1px solid transparent;border-bottom:1px solid #1b202c}
+.srow:hover{background:#121826;border-color:#242d3f}
+.srow svg{width:32px;height:32px}
+.srow .nm{font-size:11.5px;color:#d3dde9;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.srow .sub{font-size:9px;color:var(--dim2);letter-spacing:.05em}
+.srow .acts{display:flex;flex-direction:column;gap:3px}
+.mini{font:inherit;font-size:9px;padding:1px 5px;background:#161d2a;border:1px solid var(--line2);color:#8c99ac;cursor:pointer;white-space:nowrap}
+.mini:hover{border-color:var(--cyan);color:#cffff8}
+.priceIn{width:56px;background:#0b0f16;border:1px solid var(--line2);color:var(--amber);font:inherit;font-size:10px;padding:2px 3px;text-align:right}
+.empty{color:var(--dim2);font-size:11px;text-align:center;padding:18px 8px;letter-spacing:.1em}
+/* ---------- log ---------- */
+#p-log .lb{max-height:150px;overflow-y:auto;padding:6px 12px 10px;font-size:11px}
+#p-log .lb::-webkit-scrollbar{width:6px}
+#p-log .lb::-webkit-scrollbar-thumb{background:#2b3346}
+.lrow{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid #171c26;color:#8f9db0}
+.lrow .d{color:var(--dim2);font-size:9px;flex:0 0 26px;letter-spacing:.06em}
+.lrow.good{color:#8fe0b3}
+.lrow.bad{color:#ff9a8f}
+.lrow.warn{color:#ffd479}
+.lrow.sys{color:#7fd6e6}
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;z-index:500;background:rgba(3,4,8,.82);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;padding:18px}
+.mcard{width:min(560px,100%);background:linear-gradient(180deg,#151a26,#0d1017);
+  border:1px solid var(--line2);box-shadow:0 24px 60px rgba(0,0,0,.7);position:relative;
+  animation:pop .18s ease-out}
+@keyframes pop{from{transform:translateY(10px) scale(.985);opacity:.4}to{transform:none;opacity:1}}
+.mcard::before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;
+  background:linear-gradient(90deg,var(--cyan),transparent 50%,var(--magenta))}
+.mh{padding:12px 16px;border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.24em;color:var(--dim)}
+.mb{padding:16px;font-size:12.5px;color:#c2cede;line-height:1.85}
+.mb h4{font-size:13px;color:#eaf4ff;letter-spacing:.1em;margin:0 0 8px}
+.mb .hl{color:var(--amber)}
+.mb .neg{color:var(--red)}
+.mb .pos{color:var(--green)}
+.mb ul{list-style:none;margin:8px 0 0}
+.mb li{padding:4px 0 4px 14px;position:relative;font-size:12px;color:#aebbcb}
+.mb li::before{content:"▸";position:absolute;left:0;color:var(--cyan);font-size:9px;top:5px}
+.mf{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.rep-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rep-head svg{width:52px;height:52px}
+.big-number{font-size:26px;color:var(--cyan);letter-spacing:.02em}
+.dim{color:var(--dim)}
+.small{font-size:10px;color:var(--dim2);letter-spacing:.08em}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:11.5px;margin-top:8px}
+.kv span:nth-child(odd){color:var(--dim)}
+.kv span:nth-child(even){color:#d7e1ee}
+/* ==================== 尺寸校准层（整体放大） ==================== */
+body{font-size:15.5px;line-height:1.6}
+.wrap{max-width:1480px;padding:16px 16px 48px}
+.brand b{font-size:23px}
+.brand span{font-size:10px}
+.stat{padding:5px 12px;min-width:78px}
+.stat .k{font-size:10px}
+.stat b{font-size:17px}
+.heatbar{width:96px;height:9px}
+.rep{font-size:11px;padding:3px 9px}
+.rep b{font-size:12.5px}
+.grid{grid-template-columns:minmax(0,1fr) 390px;gap:14px;margin-top:14px}
+.ph{padding:10px 14px;font-size:11.5px}
+.pb{padding:14px}
+.btn{font-size:13.5px;padding:10px 16px}
+.btn.sm{font-size:12px;padding:5px 10px}
+.idle{padding:26px 14px 30px}
+.idle .big{font-size:15px}
+.idle p{font-size:13.5px;max-width:560px}
+.shop-sign{font-size:11px}
+.cust{padding:14px;gap:14px}
+.cust-art{width:104px;height:104px}
+.cust-art svg{width:98px;height:98px}
+.cust-name{font-size:18px}
+.cust-line{font-size:13.5px;margin-top:10px}
+.cust-meta{font-size:11.5px}
+.tag{font-size:10px;padding:2px 7px}
+.bench{grid-template-columns:164px minmax(0,1fr);gap:16px;padding:14px}
+.bench-art svg{width:128px;height:128px}
+.bench-name{font-size:16px}
+.bench-desc{font-size:12.5px;line-height:1.65}
+.chip{font-size:11.5px;padding:6px 10px}
+.clue{padding:9px 11px;font-size:12.5px}
+.clue-vis{width:50px;height:50px}
+.clue-t{font-size:11px}
+.clue-list{gap:9px;padding:12px 14px}
+.nego{padding:14px}
+.nego-top{font-size:12.5px}
+.nego-top b{font-size:17px}
+.counter-note{font-size:12px}
+.price-line{font-size:12.5px}
+.price-line b{font-size:22px}
+.pat{font-size:11.5px}
+.pat i{width:20px;height:8px}
+.pickrow{padding:8px 10px}
+.pickrow svg{width:42px;height:42px}
+.pickrow .nm{font-size:13.5px}
+.pickrow .meta{font-size:11px}
+.deal h3{font-size:16px}
+.deal p{font-size:13.5px}
+.reveal{font-size:12.5px;padding:10px 16px}
+.tab{font-size:11.5px;padding:10px 4px}
+.tab small{font-size:9.5px}
+.stocklist{max-height:420px;padding:10px}
+.srow{grid-template-columns:42px minmax(0,1fr) auto;gap:10px;padding:8px}
+.srow svg{width:40px;height:40px}
+.srow .nm{font-size:13px}
+.srow .sub{font-size:10.5px}
+.mini{font-size:10.5px;padding:2px 6px}
+.priceIn{width:64px;font-size:11.5px;padding:3px 4px}
+#p-log .lb{max-height:180px;font-size:12.5px}
+.lrow .d{font-size:10px;flex:0 0 30px}
+.mcard{width:min(660px,100%)}
+.mh{font-size:12px;padding:13px 18px}
+.mb{padding:18px;font-size:14px;line-height:1.9}
+.mb h4{font-size:15.5px}
+.mb li{font-size:13.5px}
+.mb .small,.small{font-size:11.5px}
+.mf{padding:14px 18px}
+.kv{font-size:12.5px}
+/* 窄屏还原为单列 */
+@media (max-width:1080px){
+  .grid{grid-template-columns:1fr}
+  .stocklist{max-height:none}
+  #p-log .lb{max-height:none}
+  .stats{width:100%;gap:6px}
+  .stat{flex:1 1 0;min-width:0;padding:4px 8px}
+}
+@media (max-width:600px){
+  .brand b{font-size:17px}
+  .brand span{display:none}
+  .cust-art{width:70px;height:70px}
+  .cust-art svg{width:66px;height:66px}
+  .cust-name{font-size:16px}
+  .cust-line{font-size:12.5px}
+  .bench{grid-template-columns:1fr}
+  .bench-art svg{width:96px;height:96px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <b>深空当铺</b>
+      <span>PROBABLY STOLEN // DECK-7 · UNIT 14</span>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="reps" id="reps"></div>
+    <button class="btn sm" onclick="help()" style="align-self:center">帮助</button>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="panel" id="p-counter"></div>
+    </div>
+    <div class="col">
+      <div class="panel" id="p-stock"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p-log" style="margin-top:12px">
+    <div class="ph"><span>柜台日志 · LOG</span><span class="ph-r" id="log-hint"></span></div>
+    <div class="lb" id="log-list"></div>
+  </div>
+  <div class="small" style="margin-top:10px;text-align:center">
+    点击「帮助」查看规则 · 本作 Demo 为原创同人玩法复刻
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+/* =========================================================
+   深空当铺 Demo — 单文件原型
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const rnd = (a,b) => a + Math.random()*(b-a);
+const ri = (a,b) => Math.floor(rnd(a,b+1));
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+const money = n => '₡' + Math.round(n);
+const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- 像素画 ---------- */
+const PAL = {
+  cyan:['#08272b','#1d8794','#5fe0e8','#d8feff'],
+  green:['#0d2a1b','#2c7a4c','#7ce0a1','#e2ffe9'],
+  magenta:['#2e0c1d','#96305c','#ff7bb0','#ffe0ec'],
+  warm:['#2e1d0a','#9a6224','#f0b269','#fff0d6'],
+  amber:['#2e230a','#9a731c','#f7c452','#fff3cc'],
+  gray:['#1b1e24','#59616d','#9aa4b2','#e9eff7'],
+  blue:['#0b1730','#28558f','#63a0f0','#dcebff'],
+  red:['#2e0f0f','#932f2f','#f06a5c','#ffd6cf'],
+  olive:['#20260f','#5f7130','#a3bb5c','#eaf5c6'],
+  purple:['#1c102e','#5f3b96','#ab84ee','#f1e4ff'],
+  lime:['#232a0a','#6d8a1e','#b9e63f','#f4ffcc']
+};
+const SHAPES = {
+  bottle:[
+    "................",".......oo.......","......oaco......","......oaco......",
+    ".....oooooo.....","....oaaaaaao....","....oacccbao....","....oabbbbao....",
+    "....oabaaabo....","....oabaaabo....","....oabbbbao....","....oaaaaaao....",
+    ".....oooooo.....","................","................","................"
+  ],
+  pack:[
+    "................","................","...oooooooooo...","...oaaaaaaaao...",
+    "...oacbbbbaao...","...oabaaaaaao...","...oabaaaaaao...","...oabacaaabo...",
+    "...oabaaaaaao...","...oabaaaaaao...","...oaaaaaaaao...","...oooooooooo...",
+    "................","................","................","................"
+  ],
+  vial:[
+    "................","................","....oooooooo....","....oaaaaaao....",
+    "....oacccbao....",".....oaaaao.....","......oao.......","......oao.......",
+    "......oao.......","......oao.......","......oao.......",".....oooooo.....",
+    "....oaaaaaao....","....oacccbao....","....oooooooo....","................"
+  ],
+  battery:[
+    "................","................","....oooooooo....","....obbbbbbo....",
+    "....oaaaaaao....","....oaacccao....","....oaacccao....","....oaaaaaao....",
+    "....oaacccao....","....oaacccao....","....oaaaaaao....","....obbbbbbo....",
+    "....oooooooo....","................","................","................"
+  ],
+  gear:[
+    "................",".....oooooo.....","....oaccccao....","...oaabbbbaao...",
+    "..oaabbbbbbaao..","..oabbbbbbbbao..","..oabbbbbbbbao..","...oabbbbbbao...",
+    "....oaaaaao.....","....oaaaaao.....","...oaaaaaaao....","..oaaaaaaaao....",
+    "..oooooooooo....","................","................","................"
+  ],
+  chip:[
+    "................","................","..oo.oooooo.oo..","..oooooooooooo..",
+    "..oaaaaaaaaaao..","..oabbbbbbbbao..","..oabcbbbbcbao..","..oabbbbbbbbao..",
+    "..oaaaaaaaaaao..","..oooooooooooo..","..oo.oooooo.oo..","................",
+    "................","................","................","................"
+  ],
+  can:[
+    "................","....oooooooo....","....obbbbbbo....","....oaaaaaao....",
+    "....oaccccao....","....oaccccao....","....oaaaaaao....","....oaccccao....",
+    "....oaccccao....","....oaaaaaao....","....oaccccao....","....oaccccao....",
+    "....obbbbbbo....","....oooooooo....","................","................"
+  ],
+  person:[
+    "................","....oooooooo....","...oaaaaaaaao...","...oacaaaaaao...",
+    "...oaaaaaaaao...","...oabaaaaabo...","...oaaaaaaaao...","....oaaaaaao....",
+    "...oooooooooo...","..oaaaaaaaaaao..","..oaacaaaaaaao..","..oaaaaaaaaaao..",
+    "..oaaaaaaaaaao..","..oooooooooooo..","................","................"
+  ]
+};
+const IDX = {o:0,a:1,b:2,c:3};
+function pix(shapeName, pal){
+  const rows = SHAPES[shapeName] || SHAPES.pack;
+  const p = PAL[pal] || PAL.gray;
+  const CELL = 6;
+  let out = '';
+  rows.forEach((row,y)=>{
+    const r = (row + '................').slice(0,16);
+    let x = 0;
+    while(x < 16){
+      const ch = r[x];
+      if(ch === '.' || !(ch in IDX)){ x++; continue; }
+      let run = 1;
+      while(x+run < 16 && r[x+run] === ch) run++;
+      out += `<rect x="${x*CELL}" y="${y*CELL}" width="${run*CELL}" height="${CELL}" fill="${p[IDX[ch]]}"/>`;
+      x += run;
+    }
+  });
+  return `<svg viewBox="0 0 96 96" shape-rendering="crispEdges">${out}</svg>`;
+}
+
+/* ---------- 物品定义 ---------- */
+const DEFS = {
+  water_pure:{n:'纯净水',cat:'水源',shape:'bottle',pal:'cyan',v:24,ill:0,unit:'瓶'},
+  water_dirty:{n:'污水',cat:'水源',shape:'bottle',pal:'olive',v:8,ill:0,unit:'壶'},
+  bandage:{n:'医用绷带',cat:'医疗',shape:'pack',pal:'green',v:20,ill:0,unit:'卷'},
+  meds:{n:'止痛药',cat:'医疗',shape:'vial',pal:'green',v:56,ill:1,unit:'板'},
+  stim:{n:'神经兴奋剂',cat:'医疗',shape:'vial',pal:'lime',v:150,ill:3,unit:'支'},
+  cigarettes:{n:'合成香烟',cat:'嗜好',shape:'pack',pal:'magenta',v:42,ill:1,unit:'条'},
+  noodles:{n:'压缩面饼',cat:'食品',shape:'pack',pal:'warm',v:14,ill:0,unit:'块'},
+  battery:{n:'旧电池',cat:'能源',shape:'battery',pal:'amber',v:36,ill:0,unit:'节'},
+  scrap:{n:'废金属',cat:'材料',shape:'gear',pal:'gray',v:12,ill:0,unit:'块'},
+  brew:{n:'私酿原液',cat:'材料',shape:'bottle',pal:'warm',v:28,ill:2,unit:'升'},
+  weapon:{n:'枪械零件',cat:'军械',shape:'gear',pal:'red',v:120,ill:3,unit:'件'},
+  tool:{n:'维修工具组',cat:'工具',shape:'gear',pal:'gray',v:62,ill:0,unit:'套'},
+  chip:{n:'拆机芯片',cat:'电子',shape:'chip',pal:'purple',v:78,ill:1,unit:'片'},
+  nuke:{n:'核废料罐',cat:'危险',shape:'can',pal:'lime',v:210,ill:3,unit:'罐'},
+  idcard:{n:'过期身份卡',cat:'证件',shape:'chip',pal:'blue',v:46,ill:2,unit:'张'}
+};
+const CATS = ['水源','医疗','嗜好','食品','能源','材料','军械','工具','电子','危险','证件'];
+
+/* ---------- 鉴定线索 ---------- */
+const CLUES_REAL = [
+  {t:'色卡比对',d:'紫外灯下，外壳落在标准色卡 #7A2E8C 上，边缘没有溢色。',vt:'swatch',ok:true},
+  {t:'印刷字口',d:'批次码 77-B 字口锐利，「7」的竖笔到尾部依然收得干净。',vt:'print',ok:true},
+  {t:'防伪标',d:'斜角看防伪标，三层冷蓝重影依次叠开。',vt:'holo',ok:true},
+  {t:'封装压痕',d:'封口压痕均匀，八个焊点大小一致地排成一列。',vt:'weld',ok:true},
+  {t:'标签胶层',d:'标签胶层发黄，但没有被整片揭过再贴回去的痕迹。',vt:'serial',ok:true}
+];
+const CLUES_FAKE = [
+  {t:'色卡比对',d:'外壳比标准色卡偏了半个色号，注塑边缘还挂着一圈溢色。',vt:'swatch',ok:false},
+  {t:'印刷字口',d:'批次码字体偏宽，「7」的竖笔尾部断了一截。',vt:'print',ok:false},
+  {t:'防伪标',d:'防伪标只有单层反光，颜色泛黄，没有冷蓝重影。',vt:'holo',ok:false},
+  {t:'封装压痕',d:'封口压痕歪斜，焊点只有五个，大小不一。',vt:'weld',ok:false},
+  {t:'零件编号',d:'编号是平口刀刻的，正品该是圆头压印。',vt:'serial',ok:false}
+];
+const CLUES_AMBIG = [
+  {t:'使用痕迹',d:'外壳有几道旧划痕——像是被人用过一阵，也像是运输磨的。',vt:'weld',ok:null},
+  {t:'气味',d:'凑近有股消毒水味。货站到处都是这味，说不清。',vt:'holo',ok:null},
+  {t:'重量',d:'手感比记忆里轻了一点点。也可能是我多心。',vt:'serial',ok:null}
+];
+const CLUES_STOLEN = [
+  {t:'序列号',d:'序列号被砂纸磨掉一半，边缘还留着治安部的封条胶痕。',vt:'serial',ok:'stolen'},
+  {t:'标签残胶',d:'标签撕角处有整条封条残胶——这货是从证物柜里出来的。',vt:'serial',ok:'stolen'}
+];
+function clueVisual(c){
+  const p = PAL.gray;
+  if(c.vt === 'swatch') return `<svg viewBox="0 0 42 42" shape-rendering="crispEdges">
+    <rect x="4" y="8" width="14" height="26" fill="#7A2E8C"/><rect x="20" y="8" width="14" height="26" fill="${c.ok===false?'#8f3f92':'#7A2E8C'}"/>
+    <rect x="4" y="34" width="30" height="3" fill="#2b3346"/></svg>`;
+  if(c.vt === 'print') return `<svg viewBox="0 0 42 42"><rect x="4" y="12" width="34" height="18" fill="#0d1219" stroke="#2b3346"/>
+    <text x="21" y="26" text-anchor="middle" font-family="monospace" font-size="9" fill="${c.ok===false?'#ff7c6a':'#8fe6d8'}">77-B</text></svg>`;
+  if(c.vt === 'holo') return `<svg viewBox="0 0 42 42"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="${c.ok===false?'#ffd76b':'#5fe0e8'}"/><stop offset=".5" stop-color="#ab84ee"/>
+    <stop offset="1" stop-color="${c.ok===false?'#8a6d2a':'#2b6fd0'}"/></linearGradient></defs>
+    <circle cx="21" cy="21" r="14" fill="url(#hg)" opacity=".85"/></svg>`;
+  if(c.vt === 'serial') return `<svg viewBox="0 0 42 42">${[0,1,2,3,4,5].map(i=>`<rect x="${6+i*5}" y="10" width="${i%2?2:3}" height="22" fill="#7d8898"/>`).join('')}
+    <rect x="4" y="30" width="34" height="3" fill="${c.ok==='stolen'?'#9a731c':(c.ok===false?'#932f2f':'#2b3346')}"/></svg>`;
+  return `<svg viewBox="0 0 42 42">${[0,1,2,3,4,5,6,7].map(i=>`<circle cx="${10+(i%4)*8}" cy="${12+Math.floor(i/4)*16}" r="3" fill="${c.ok===false?'#932f2f':'#2c7a4c'}"/>`).join('')}</svg>`;
+}
+
+/* ---------- 顾客模板 ---------- */
+const TYPES = {
+  drifter:{label:'流民',pal:'gray',mode:'sell',
+    sell:['water_dirty','noodles','scrap','bandage','water_pure'],
+    need:['水源','食品'],budget:0.92,
+    lines:['老板，换点信用点，孩子还等着吃饭。','这批货干净，真干净，我发誓。','我不懂行，你给个公道价就行。']},
+  scav:{label:'拾荒者',pal:'olive',mode:'sell',
+    sell:['scrap','battery','chip','tool','water_dirty'],
+    need:['材料','能源'],budget:0.98,
+    lines:['七号货舱塌了半边，我爬进去扒出来的。','别问从哪来的，问了我也说不清。','这个……应该还能用，你验验。']},
+  thief:{label:'小偷',pal:'magenta',mode:'sell',
+    sell:['cigarettes','meds','chip','idcard','stim'],
+    need:['嗜好'],budget:1.0,
+    lines:['快进快出，我不喜欢在这儿站着。','别多看，直接开价。','这玩意儿来路……你懂的，别问。']},
+  officer:{label:'治安官',pal:'blue',mode:'buy',
+    sell:['idcard','chip','tool'],
+    need:['工具','能源'],budget:1.12,
+    lines:['例行看看。你柜台最近干净吗？','别紧张，我不查你，我只是买点东西。','第七小队今天加班，拜你们所赐。']},
+  rebel:{label:'反抗军',pal:'red',mode:'buy',
+    sell:['weapon','meds'],
+    need:['医疗','军械'],budget:1.42,
+    lines:['上面的封锁又收紧了，我需要补给。','现金，不记账，不问出处。','治安部在码头设卡，你最好也小心点。']},
+  aug:{label:'???',pal:'cyan',mode:'sell',
+    sell:['stim','chip','meds','nuke'],
+    need:['水源','食品'],budget:1.0,
+    lines:['……你好。我想出售一件物品。','我的呼吸……是不是有点吵？抱歉。','请快一点。我的电池不太够用了。']}
+};
+const NAMES = ['「哑嗓」老K','三号舱的薇拉','独眼贝恩','铁皮罐','阿七','灰袍','小铆钉',
+  '「坏账」罗恩','拾荒佬·马斯','静默者','断指莉','锈脸','半截烟','夜班护士','港口老陈',
+  '「螺丝」葛雷','白噪音','末班车的乘客','三只手的柯','冷却管工人'];
+const GENERIC_TELLS = [
+  '他很疲惫，回答问题总是慢半拍。',
+  '外套上有股消毒水和机油混在一起的味道。',
+  '左手一直插在袖子里，没拿出来过。',
+  '他说话时，眼睛在往柜台后面的门瞟。',
+  '指节上有新鲜的擦伤，像是刚搬过重物。'
+];
+const AUG_TELLS = [
+  '他说话时，喉结没有跟着动。',
+  '灯光闪了一下，他的瞳孔没有收缩。',
+  '他的呼吸声在你提问后停了整整两秒。',
+  '他重复了你上一句话的最后一个词，音调一模一样。',
+  '他的影子比灯光角度慢了半拍才挪过来。'
+];
+
+/* ---------- 状态 ---------- */
+const S = {
+  day:0, credits:220, heat:12, target:1000,
+  rep:{guard:50,rebel:40,black:35},
+  stock:{shelf:[],store:[],hidden:[]},
+  caps:{shelf:4,store:14,hidden:3},
+  market:{}, inspectDay:false, officerDone:false,
+  queue:5, served:0, phase:'idle', cust:null, nego:null, pickUid:null,
+  rentWeeks:0, nextRentDay:7, uid:1, log:[], tab:'shelf', deal:null, over:false
+};
+const RENTS = [260,340,440,560,700,860];
+const WEEK = 7;
+
+function log(text, cls=''){
+  S.log.unshift({d:S.day, t:text, cls});
+  if(S.log.length > 80) S.log.pop();
+}
+function market(cat){ return S.market[cat] || 1; }
+function claimVal(it){ return DEFS[it.defId].v * market(it.def.cat); }
+function trueVal(it){ return DEFS[it.defId].v * market(it.def.cat) * (it.fake?0.16:1) * it.quality; }
+
+function makeItem(defId, opts={}){
+  const def = DEFS[defId];
+  const fake = opts.fake !== undefined ? opts.fake : (Math.random() < 0.26);
+  const stolen = opts.stolen !== undefined ? opts.stolen : (Math.random() < (def.ill >= 2 ? 0.42 : 0.14));
+  const it = {
+    uid:'i'+(S.uid++), defId, def, fake, stolen,
+    quality: opts.quality !== undefined ? opts.quality : rnd(0.78,1.04),
+    revealed:false, price:null, seen:[]
+  };
+  it.clues = genClues(it);
+  it.seen = it.clues.map(()=>false);
+  return it;
+}
+function genClues(it){
+  const src = it.fake ? CLUES_FAKE : CLUES_REAL;
+  const s = shuffle(src.slice());
+  const out = [s[0], s[1], pick(CLUES_AMBIG)];
+  if(it.stolen) out.push(pick(CLUES_STOLEN));
+  else out.push(s[2]);
+  return shuffle(out);
+}
+function itemWhere(uid){
+  if(S.stock.shelf.some(i=>i.uid===uid)) return 'shelf';
+  if(S.stock.store.some(i=>i.uid===uid)) return 'store';
+  if(S.stock.hidden.some(i=>i.uid===uid)) return 'hidden';
+  return null;
+}
+function findItem(uid){
+  return S.stock.shelf.find(i=>i.uid===uid) || S.stock.store.find(i=>i.uid===uid) || S.stock.hidden.find(i=>i.uid===uid) || null;
+}
+function removeItem(uid){
+  ['shelf','store','hidden'].forEach(k=>{
+    const i = S.stock[k].findIndex(x=>x.uid===uid);
+    if(i>=0) S.stock[k].splice(i,1);
+  });
+}
+const LOC_NAME = {shelf:'柜台',store:'仓库',hidden:'暗格'};
+
+/* =========================================================
+   渲染
+   ========================================================= */
+function render(){
+  renderStats();
+  renderCounter();
+  renderStock();
+  renderLog();
+}
+function renderStats(){
+  const rentLeft = S.nextRentDay - S.day;
+  const rentAmt = RENTS[Math.min(S.rentWeeks, RENTS.length-1)];
+  $('#stats').innerHTML = `
+    <div class="stat"><span class="k">DAY</span><b>D${String(S.day).padStart(2,'0')}</b></div>
+    <div class="stat"><span class="k">信用点</span><b class="${S.credits<40?'warn':''}">${money(S.credits)}</b></div>
+    <div class="stat"><span class="k">热度 ${S.heat|0}</span>
+      <div class="heatbar"><i style="width:${clamp(S.heat,0,100)}%"></i></div></div>
+    <div class="stat"><span class="k">房租 D${S.nextRentDay}</span><b class="${rentLeft<=1?'warn':''}">${money(rentAmt)} · ${rentLeft}天</b></div>`;
+  const r = S.rep;
+  $('#reps').innerHTML = `
+    <div class="rep g">治安 <b>${Math.round(r.guard)}</b></div>
+    <div class="rep r">反抗军 <b>${Math.round(r.rebel)}</b></div>
+    <div class="rep b">黑市 <b>${Math.round(r.black)}</b></div>`;
+}
+
+function renderCounter(){
+  const el = $('#p-counter');
+  const head = `<div class="ph"><span>柜台 · SALES FLOOR</span>
+    <span class="ph-r">今日 ${S.served}/${S.queue} · ${S.phase==='idle'?'待客':'营业中'}</span></div>`;
+
+  if(S.over){ el.innerHTML = head + `<div class="pb"><div class="empty">舱门已封条。</div></div>`; return; }
+
+  if(S.phase === 'idle'){
+    const done = S.served >= S.queue;
+    el.innerHTML = head + `
+      <div class="idle">
+        <div class="shop-sign">UNIT 14 · PAWN & EXCHANGE</div>
+        <div class="big">${done ? '今日的客人已经走完了。' : '柜台后面，卷帘门半开着。'}</div>
+        <p>${done
+          ? '清点一下库存，把违禁的东西塞进暗格，然后闭店。'
+          : '走廊传来脚步声。有人在门口停下，正在看你的招牌。'}</p>
+        <div class="btn-row" style="justify-content:center">
+          ${done
+            ? `<button class="btn primary" onclick="nightPhase()">闭店 · 进入夜间</button>`
+            : `<button class="btn primary" onclick="nextCustomer()">接待下一位顾客</button>
+               <button class="btn ghost" onclick="nightPhase()">提前闭店</button>`}
+        </div>
+      </div>`;
+    return;
+  }
+
+  if(S.phase === 'cust' && S.cust){
+    el.innerHTML = head + customerCard(S.cust) + counterBody();
+    return;
+  }
+
+  if(S.phase === 'deal' && S.deal){
+    el.innerHTML = head + dealView();
+    return;
+  }
+
+  el.innerHTML = head;
+}
+
+function customerCard(c){
+  return `<div class="cust">
+    <div class="cust-art">${pix('person', c.pal)}</div>
+    <div class="cust-info">
+      <div class="cust-top">
+        <span class="cust-name">${esc(c.name)}</span>
+        <span class="tag t-${c.type}">${c.label}</span>
+        ${c.mode==='buy'?`<span class="tag live">买家</span>`:`<span class="tag">卖家</span>`}
+      </div>
+      <div class="cust-line">「${esc(c.line)}」</div>
+      <div class="cust-meta">
+        ${c.mode==='buy'
+          ? `想买：<b>${c.needCat}</b> · 预算 <b>${money(c.budget*0.75)}–${money(c.budget)}</b>`
+          : `想出手：<b>${c.item ? c.item.def.n : '—'}</b>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+function counterBody(){
+  const c = S.cust;
+  if(c.mode === 'buy') return buyerBody(c);
+  return sellerBody(c);
+}
+
+/* ---------- 卖家（顾客出货） ---------- */
+function sellerBody(c){
+  const it = c.item;
+  const shown = it.clues.map((cl,i)=> it.seen[i] ? clueCard(cl) : '').join('');
+  const nSeen = it.seen.filter(Boolean).length;
+
+  let negoHtml = '';
+  if(!S.nego){
+    negoHtml = `<div class="btn-row" style="padding:0 12px 12px">
+      <button class="btn primary" onclick="startNego()">开始议价</button>
+      <button class="btn ghost" onclick="refuseCustomer('你摆了摆手，连价都懒得问。')">不收</button>
+      <button class="btn danger" onclick="openReport()">举报</button>
+    </div>`;
+  } else {
+    negoHtml = negoPanel();
+  }
+
+  return `
+  <div class="bench">
+    <div class="bench-art">${pix(it.def.shape, it.def.pal)}</div>
+    <div>
+      <div class="bench-name">${it.def.n}
+        <span class="tag">${it.def.cat}</span>
+        ${it.def.ill>0?`<span class="tag ill">管制 ${it.def.ill}级</span>`:''}
+      </div>
+      <div class="bench-desc">
+        对方声称这是${it.def.cat}类的正货，开价 <b style="color:var(--amber)">${money(c.ask)}</b>。<br>
+        已经检查了 ${nSeen}/${it.clues.length} 处细节${nSeen===0?'——不翻开看看，你只能靠运气。':''}
+      </div>
+      <div class="clue-btns">
+        ${it.clues.map((cl,i)=>`<button class="chip" ${it.seen[i]?'disabled':''} onclick="inspectClue(${i})">
+          ${it.seen[i]?'✓ ':''}${cl.t}</button>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="clue-list">${shown || `<div class="empty">还没有任何线索。鉴定是这行的命。</div>`}</div>
+  ${negoHtml}`;
+}
+function clueCard(cl){
+  let cls = '';
+  if(cl.ok === false) cls = 'bad';
+  else if(cl.ok === true) cls = 'good';
+  else if(cl.ok === 'stolen') cls = 'warn';
+  return `<div class="clue ${cls}">
+    <div class="clue-vis">${clueVisual(cl)}</div>
+    <div><div class="clue-t">${cl.t}</div><div>${cl.d}</div></div>
+  </div>`;
+}
+
+/* ---------- 买家（顾客要买） ---------- */
+function buyerBody(c){
+  const list = S.stock.shelf;
+  if(!list.length){
+    return `<div class="picklist">
+      <div class="empty">柜台是空的。<br>手上没货，生意做不成。</div>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn ghost" onclick="refuseCustomer('你摊开手：「柜台空了，改天再来。」')">送客</button>
+      </div>
+    </div>`;
+  }
+  const match = list.filter(i=>i.def.cat === c.needCat);
+  const picked = S.pickUid ? findItem(S.pickUid) : null;
+  const rows = (match.length ? match : list).map(i=>{
+    const sel = S.pickUid === i.uid;
+    return `<div class="pickrow ${sel?'sel':''}" onclick="pickShelf('${i.uid}')">
+      ${pix(i.def.shape, i.def.pal)}
+      <div>
+        <div class="nm">${i.def.n} ${i.def.cat===c.needCat?'<span class="tag live">对口</span>':''}</div>
+        <div class="small">标价 ${money(i.price||Math.round(claimVal(i)*1.15))}${i.revealed&&i.fake?' · <span style="color:#ff9a8f">赝品</span>':''}</div>
+      </div>
+      <div class="meta">${i.revealed? (i.fake?'赝品':'真品'):'未验'}</div>
+    </div>`;
+  }).join('');
+
+  let negoHtml = '';
+  if(picked && S.nego) negoHtml = negoPanel();
+  else if(picked){
+    negoHtml = `<div class="btn-row" style="padding:0 12px 12px">
+      <button class="btn primary" onclick="startSellNego()">报价给他</button>
+      <button class="btn ghost" onclick="S.pickUid=null;render()">换一件</button>
+      <button class="btn ghost" onclick="refuseCustomer('你摇摇头，没打算卖。')">不卖</button>
+    </div>`;
+  }
+
+  return `
+  <div class="picklist">
+    <div class="small" style="margin-bottom:4px">
+      ${match.length?'他想买 '+c.needCat+' —— 柜台上有对口的货。':'柜台没有对口的货，他随手翻了翻。'}
+    </div>
+    ${rows}
+  </div>
+  ${negoHtml}`;
+}
+
+/* ---------- 议价面板 ---------- */
+function negoPanel(){
+  const n = S.nego;
+  const p = clamp(Math.round(n.patience/25),0,4);
+  const patHtml = [0,1,2,3].map(i=>`<i class="${i<p?(p<=1?'low':'f'):''}"></i>`).join('');
+  return `<div class="nego">
+    <div class="nego-top">
+      <span>${n.mode==='buy'?'对方开价':'对方预算'}</span>
+      <b>${n.mode==='buy' ? money(n.ref) : money(n.ref*0.72)+'–'+money(n.ref)}</b>
+    </div>
+    ${n.counter!==null?`<div class="counter-note">${n.mode==='buy'
+      ? `他还价：<b>${money(n.counter)}</b> —— 「再加点，我也得吃饭。」`
+      : `他最多给：<b>${money(n.counter)}</b> —— 「这价我就要了。」`}</div>`:''}
+    <input type="range" id="offerRange" min="${n.min}" max="${n.max}" step="1" value="${n.offer}"
+      oninput="onOffer(this.value)">
+    <div class="price-line"><span>你的${n.mode==='buy'?'收购':'成交'}价</span><b id="offerVal">${money(n.offer)}</b></div>
+    <div class="pat">耐心 ${patHtml} <span style="margin-left:auto">${n.round>0?'已谈 '+n.round+' 轮':''}</span></div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="submitOffer()">${n.mode==='buy'?'这个价，卖不卖？':'按这个价成交'}</button>
+      <button class="btn ghost" onclick="refuseCustomer('你合上账本：「今天不做了。」')">放弃</button>
+      <button class="btn danger" onclick="openReport()">举报</button>
+    </div>
+  </div>`;
+}
+function onOffer(v){
+  S.nego.offer = Number(v);
+  const el = $('#offerVal');
+  if(el) el.textContent = money(v);
+}
+
+/* ---------- 交易结果 ---------- */
+function dealView(){
+  const d = S.deal;
+  return `<div class="deal">
+    <h3>${d.title}</h3>
+    <p>${d.text}</p>
+    ${d.reveal ? `<div class="reveal">${d.reveal}</div>` : ''}
+    <div class="btn-row" style="justify-content:center;margin-top:18px">
+      <button class="btn primary" onclick="nextCustomer()">下一位</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- 库存 ---------- */
+function renderStock(){
+  const caps = S.caps;
+  const el = $('#p-stock');
+  const counts = {shelf:S.stock.shelf.length, store:S.stock.store.length, hidden:S.stock.hidden.length};
+  const tabs = ['shelf','store','hidden'].map(k=>`
+    <div class="tab ${S.tab===k?'on':''}" onclick="switchTab('${k}')">
+      ${LOC_NAME[k]}<small>${counts[k]}/${caps[k]}</small>
+    </div>`).join('');
+  const list = S.stock[S.tab];
+  const rows = list.length ? list.map(it=>stockRow(it)).join('') :
+    `<div class="empty">${S.tab==='shelf'?'柜台空着。买家不会等你。':(S.tab==='hidden'?'暗格里什么都没有。搜查队碰不到这里。':'仓库空的。')}</div>`;
+
+  el.innerHTML = `<div class="ph"><span>库存 · STOCK</span><span class="ph-r">${S.tab==='hidden'?'避搜查':'可交易'}</span></div>
+    <div class="tabs">${tabs}</div>
+    <div class="stocklist">${rows}</div>`;
+}
+function stockRow(it){
+  const v = Math.round(claimVal(it));
+  const badges = [];
+  if(it.revealed){
+    badges.push(it.fake?'<span class="tag fake">赝品</span>':'<span class="tag real">真品</span>');
+    if(it.stolen) badges.push('<span class="tag stolen">赃物</span>');
+    if(it.def.ill>0) badges.push(`<span class="tag ill">违禁${it.def.ill}</span>`);
+  } else badges.push('<span class="tag">未验</span>');
+
+  const priceInput = S.tab === 'shelf'
+    ? `<input class="priceIn" type="number" value="${it.price ?? Math.round(v*1.15)}" onchange="setPrice('${it.uid}',this.value)">`
+    : `<span class="small">值 ${money(v)}</span>`;
+
+  const acts = [];
+  if(S.tab !== 'shelf') acts.push(`<button class="mini" onclick="moveTo('${it.uid}','shelf')">上架</button>`);
+  if(S.tab !== 'store') acts.push(`<button class="mini" onclick="moveTo('${it.uid}','store')">入库</button>`);
+  if(S.tab !== 'hidden') acts.push(`<button class="mini" onclick="moveTo('${it.uid}','hidden')">藏暗格</button>`);
+  acts.push(`<button class="mini" onclick="askDrop('${it.uid}')" style="color:#8a4b52">丢弃</button>`);
+
+  return `<div class="srow">
+    ${pix(it.def.shape, it.def.pal)}
+    <div>
+      <div class="nm">${it.def.n} ${badges.join('')}</div>
+      <div class="sub">${priceInput} <span style="color:#4b5464">${it.quality>0.95?'品相好':'有磨损'}</span></div>
+    </div>
+    <div class="acts">${acts.join('')}</div>
+  </div>`;
+}
+
+function renderLog(){
+  $('#log-hint').textContent = S.phase==='idle' ? '等待营业' : '实时';
+  $('#log-list').innerHTML = S.log.length ? S.log.map(l=>
+    `<div class="lrow ${l.cls}"><span class="d">D${l.d}</span><span>${l.t}</span></div>`).join('')
+    : `<div class="empty">还没有记录。</div>`;
+}
+
+/* =========================================================
+   交互：鉴定 / 库存 / 议价
+   ========================================================= */
+function inspectClue(i){
+  const c = S.cust;
+  if(!c || c.mode!=='sell' || !c.item) return;
+  c.item.seen[i] = true;
+  render();
+}
+function pickShelf(uid){
+  S.pickUid = uid;
+  S.nego = null;
+  render();
+}
+function switchTab(k){ S.tab = k; render(); }
+
+function moveTo(uid, to){
+  const it = findItem(uid);
+  if(!it) return;
+  if(S.stock[to].length >= S.caps[to]){
+    log(`${LOC_NAME[to]}满了，塞不下 ${it.def.n}。`, 'warn');
+    render(); return;
+  }
+  removeItem(uid);
+  S.stock[to].push(it);
+  if(to !== 'shelf') it.price = null;
+  log(`${it.def.n} → ${LOC_NAME[to]}。`, '');
+  render();
+}
+function setPrice(uid, v){
+  const it = S.stock.shelf.find(i=>i.uid===uid);
+  if(!it) return;
+  it.price = Math.max(1, Math.round(Number(v)||0));
+  render();
+}
+function askDrop(uid){
+  const it = findItem(uid);
+  if(!it) return;
+  modal(`<div class="mh">丢弃</div><div class="mb">
+    <p>把手上的 <b>${it.def.n}</b> 扔进回收口？它不会再回来。</p>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn danger" onclick="doDrop('${uid}')">丢掉</button>
+      <button class="btn ghost" onclick="closeModal()">留着</button>
+    </div></div>`);
+}
+function doDrop(uid){
+  const it = findItem(uid);
+  if(!it) { closeModal(); return; }
+  removeItem(uid);
+  closeModal();
+  log(`把 ${it.def.n} 扔进了回收口。`, '');
+  render();
+}
+
+/* ---------- 顾客生成 ---------- */
+function genCustomer(){
+  let type;
+  if(S.inspectDay && !S.officerDone){ type = 'officer'; S.officerDone = true; }
+  else {
+    const r = Math.random() + (S.day<=2 ? -0.12 : 0);
+    if(r < 0.30) type = 'drifter';
+    else if(r < 0.47) type = 'scav';
+    else if(r < 0.66) type = 'thief';
+    else if(r < 0.72) type = 'officer';
+    else if(r < 0.86) type = 'rebel';
+    else type = 'aug';
+  }
+  const T = TYPES[type];
+  const c = {
+    type, label:T.label, pal:T.pal, name:pick(NAMES),
+    line:pick(T.lines), patience:100, rounds:0,
+    mode: type==='thief' ? 'sell' : (type==='aug' ? (Math.random()<0.55?'sell':'buy') : T.mode),
+    needCat: pick(T.need)
+  };
+  if(c.mode === 'sell'){
+    const defId = pick(T.sell);
+    c.item = makeItem(defId, {
+      stolen: type==='thief' ? Math.random()<0.78 : Math.random()<0.12,
+      fake: Math.random() < (type==='thief'?0.4:0.24)
+    });
+    c.ask = Math.round(claimVal(c.item) * (type==='thief'?rnd(0.4,0.58):rnd(0.46,0.7)));
+  } else {
+    // 预算 = 该品类均价 * 随机系数 * 顾客类型系数
+    const catVals = Object.values(DEFS).filter(d=>d.cat===c.needCat).map(d=>d.v);
+    const avg = catVals.length ? catVals.reduce((a,b)=>a+b,0)/catVals.length : 60;
+    c.budget = Math.round(avg * rnd(0.95,1.3) * T.budget);
+  }
+  if(type === 'aug'){
+    c.tells = shuffle(AUG_TELLS.slice()).slice(0,2).concat([pick(GENERIC_TELLS)]);
+  } else {
+    c.tells = shuffle(GENERIC_TELLS.slice()).slice(0, ri(1,2));
+  }
+  return c;
+}
+
+function nextCustomer(){
+  if(S.served >= S.queue){
+    S.phase='idle'; S.cust=null; S.nego=null; S.pickUid=null;
+    render(); return;
+  }
+  S.cust = genCustomer();
+  S.phase = 'cust'; S.nego = null; S.pickUid = null;
+  // 治安官到场：检查柜台
+  if(S.cust.type === 'officer') officerSearch();
+  render();
+}
+
+function officerSearch(){
+  const bad = S.stock.shelf.filter(i=>i.def.ill>0 || i.stolen);
+  if(!bad.length){
+    log('治安官扫了一眼柜台，什么都没说。', 'sys');
+    return;
+  }
+  let fine = 0;
+  bad.forEach(it=>{
+    fine += 55 + it.def.ill*25 + (it.stolen?40:0);
+    removeItem(it.uid);
+    log(`治安官没收了柜台上的${it.def.n}。`, 'bad');
+  });
+  S.credits -= fine;
+  S.rep.guard -= 7;
+  S.heat = Math.max(0, S.heat - 6);
+  log(`罚款 ${money(fine)}。柜台上的东西不能这么摆。`, 'bad');
+  setTimeout(()=>modal(`<div class="mh">例行检查</div>
+    <div class="mb"><h4>治安官掀开了柜台帘布</h4>
+      <p>他没有问话，只是把那些东西一件件拎出来，扔进证物袋。</p>
+      <div class="kv"><span>罚款</span><span class="neg">−${money(fine)}</span>
+      <span>没收</span><span>${bad.map(i=>i.def.n).join('、')}</span>
+      <span>治安声望</span><span class="neg">−7</span></div>
+      <p class="small" style="margin-top:10px">违禁品要放暗格。或者，别让巡查日撞上。</p></div>
+    <div class="mf"><button class="btn primary" onclick="closeModal()">知道了</button></div>`), 260);
+}
+
+/* ---------- 议价流程 ---------- */
+function startNego(){
+  const c = S.cust, it = c.item;
+  const ask = c.ask;
+  S.nego = {
+    mode:'buy', item:it, ref:ask,
+    accept: Math.round(ask * rnd(0.6,0.82)),
+    offer: Math.round(ask * 0.78),
+    min: Math.max(1, Math.round(ask*0.3)), max: Math.round(ask*1.2),
+    counter:null, round:0, patience:100
+  };
+  render();
+}
+function startSellNego(){
+  const c = S.cust, it = findItem(S.pickUid);
+  if(!it) return;
+  const v = claimVal(it) * (c.type==='rebel'?1.28:1) * (c.type==='drifter'?0.94:1);
+  const budget = Math.round(v * rnd(0.98,1.22));
+  const offer = Math.max(1, Math.round((it.price || claimVal(it)*1.15)));
+  S.nego = {
+    mode:'sell', item:it, ref:budget,
+    accept:budget,
+    offer,
+    min: Math.max(1, Math.round(v*0.35)), max: Math.max(offer, Math.round(v*1.9)),
+    counter:null, round:0, patience:100
+  };
+  render();
+}
+function submitOffer(){
+  const n = S.nego, c = S.cust;
+  if(!n || !c) return;
+  n.round++;
+  const ok = n.mode==='buy' ? n.offer >= n.accept : n.offer <= n.accept;
+  if(ok){ finishDeal(); return; }
+
+  n.patience -= 28;
+  n.counter = Math.round((n.offer + n.accept) / 2);
+  n.offer = n.counter;
+  if(n.patience <= 0){
+    S.nego = null;
+    S.deal = {title:'谈崩了', text:'对方的耐心先一步用完了。他把东西收回怀里，转身就走，靴底在铁板上敲出很响的声音。', reveal:''};
+    S.phase = 'deal'; S.served++;
+    log(`${c.name} 失去了耐心，交易告吹。`, 'warn');
+    render(); return;
+  }
+  render();
+  const r = $('#offerRange');
+  if(r) r.value = n.offer;
+  const v = $('#offerVal');
+  if(v) v.textContent = money(n.offer);
+}
+
+function finishDeal(){
+  const n = S.nego, c = S.cust;
+  const it = n.item;
+  if(n.mode === 'buy'){
+    if(S.stock.store.length >= S.caps.store && S.stock.shelf.length >= S.caps.shelf){
+      log('没有地方放货了，这笔做不成。', 'warn');
+      S.nego = null; render(); return;
+    }
+    S.credits -= n.offer;
+    it.revealed = true;
+    it.price = null;
+    if(S.stock.shelf.length < S.caps.shelf) S.stock.shelf.push(it);
+    else S.stock.store.push(it);
+    let heat = 0;
+    if(it.stolen) heat += 3;
+    if(it.def.ill >= 2) heat += 2;
+    S.heat += heat;
+    if(it.stolen) log('货里带着治安部的封条胶痕——先别上架。', 'warn');
+    const truth = it.fake
+      ? `<span class="tag fake">赝品</span> 真实价值约 ${money(trueVal(it))}`
+      : `<span class="tag real">真品</span> 品相 ${(it.quality*100|0)}%`;
+    S.deal = {
+      title:'收购完成',
+      text:`你用 ${money(n.offer)} 收下了${it.def.n}。对方把信用点揣进兜里，走得比来时快。`,
+      reveal: truth + (it.stolen?' · <span class="tag stolen">赃物</span>':'')
+    };
+    log(`买入 ${it.def.n}，支出 ${money(n.offer)}${it.fake?'（赝品）':''}。`, it.fake?'bad':'');
+  } else {
+    S.credits += n.offer;
+    removeItem(it.uid);
+    let heat = 0;
+    if(it.def.ill > 0) heat += it.def.ill * 4;
+    if(it.stolen) heat += 6;
+    if(it.fake && n.offer > trueVal(it)*1.4) heat += 8;
+    S.heat += heat;
+    const markup = it.fake && n.offer > trueVal(it)*1.4;
+    S.deal = {
+      title:'成交',
+      text:`你把${it.def.n}推过柜台。${markup?'你贴了张假标，价签下的字是用针尖改过的。':'他数出信用点，一张一张推过来。'}`,
+      reveal: `${money(n.offer)} 入账${heat>0?` · <span style="color:#ff9a8f">热度 +${heat}</span>`:''}`
+    };
+    log(`卖出 ${it.def.n}，收入 ${money(n.offer)}${heat>0?`，热度 +${heat}`:''}。`, heat>0?'warn':'good');
+    if(it.def.ill>0) S.rep.guard = Math.max(0, S.rep.guard - 1);
+    if(it.def.ill>0 || it.stolen) S.rep.black += 2;
+  }
+  S.nego = null;
+  S.pickUid = null;
+  S.phase = 'deal';
+  S.served++;
+  render();
+}
+
+function refuseCustomer(text){
+  const c = S.cust;
+  S.nego = null; S.pickUid = null;
+  S.deal = {title:'交易告吹', text, reveal:''};
+  S.phase = 'deal';
+  S.served++;
+  log(`${c ? c.name : '顾客'} 空手离开。`, '');
+  render();
+}
+
+/* ---------- 举报 ---------- */
+function openReport(){
+  const c = S.cust;
+  if(!c) return;
+  modal(`<div class="mh">举报 · REPORT</div>
+    <div class="mb">
+      <p>呼叫治安频道，需要一条说得过去的理由。编错了，代价由你付。</p>
+      <div class="kv">
+        <span>对象</span><span>${esc(c.name)} · ${c.label}</span>
+        <span>你手上的证据</span><span>${c.mode==='sell'? (c.item.seen.filter(Boolean).length+' 处已检细节') : '只有直觉'}</span>
+      </div>
+      <p class="small" style="margin-top:10px">你观察到的</p>
+      <ul>${c.tells.map(t=>`<li>${t}</li>`).join('')}</ul>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn" onclick="doReport('stolen')">他携带赃物</button>
+        <button class="btn" onclick="doReport('wanted')">他是通缉犯</button>
+        <button class="btn" onclick="doReport('aug')">他是 AUG 伪人</button>
+      </div>
+      <p class="small" style="margin-top:10px">误报：罚款 ₡70，热度 +6，治安声望 −10。</p>
+    </div>
+    <div class="mf"><button class="btn ghost" onclick="closeModal()">再想想</button></div>`);
+}
+function doReport(claim){
+  closeModal();
+  const c = S.cust;
+  if(!c) return;
+  let success = false, bounty = 0, text = '';
+  if(claim === 'stolen' && c.mode==='sell' && c.item.stolen){ success = true; bounty = 95; text = '治安队在走廊尽头堵住了他，从他怀里搜出了带封条胶痕的货。'; }
+  if(claim === 'wanted' && c.type === 'thief' && Math.random() < 0.55){ success = true; bounty = 130; text = '通缉令上的脸对上了——一个在逃的货舱窃贼。'; }
+  if(claim === 'aug' && c.type === 'aug'){ success = true; bounty = 240; text = '治安队戴着呼吸面罩围上来。他的皮肤下面，是密密麻麻的伺服线。'; }
+
+  if(success){
+    S.credits += bounty;
+    S.rep.guard += 8;
+    S.rep.black -= 6;
+    S.heat = Math.max(0, S.heat - 8);
+    log(`举报成功，赏金 ${money(bounty)}。`, 'good');
+    S.deal = {title:'举报成功', text, reveal:`赏金 ${money(bounty)} · 治安声望 +8 · 热度 −8`};
+  } else {
+    S.credits -= 70;
+    S.heat += 6;
+    S.rep.guard -= 10;
+    log('误报。治安队白跑一趟，罚单拍在了柜台上。', 'bad');
+    S.deal = {title:'误报', text:'治安队来了又走。他们看你的眼神，像在记一个名字。', reveal:`罚款 ₡70 · 热度 +6 · 治安声望 −10`};
+  }
+  S.nego = null; S.pickUid = null;
+  if(c.mode === 'sell' && c.item) removeItem(c.item.uid);
+  S.phase = 'deal'; S.served++;
+  render();
+}
+
+/* =========================================================
+   日程循环
+   ========================================================= */
+function startDay(){
+  S.day++;
+  S.served = 0;
+  S.queue = ri(4,6);
+  S.officerDone = false;
+  S.phase = 'idle'; S.cust = null; S.nego = null; S.pickUid = null;
+  S.market = {};
+  CATS.forEach(c=>S.market[c] = 1);
+  const ups = shuffle(CATS.slice()).slice(0,2);
+  ups.forEach(c=> S.market[c] = +(rnd(1.18,1.5)).toFixed(2));
+  const rest = CATS.filter(c=>!ups.includes(c));
+  const down = pick(rest);
+  S.market[down] = +(rnd(0.68,0.84)).toFixed(2);
+  S.inspectDay = Math.random() < 0.3 || S.heat > 58;
+
+  const hype = ups.map(c=>`<li>${c} 收购与售价 <span class="hl">+${Math.round((S.market[c]-1)*100)}%</span></li>`).join('')
+    + `<li>${down} 价格 <span class="neg">${Math.round((1-S.market[down])*100)}% 下跌</span></li>`;
+
+  const headlines = [
+    '七号货舱的密封门又被撬了，治安部说「正在调查」。',
+    '水处理厂只开了半条线，码头排起长队。',
+    '一个拾荒者在通风管里被找到，人已经凉了。',
+    '黑市清道夫换了新的接头暗号，据说和鱼有关。',
+    '反抗军在B环贴了新的标语，两小时后被刷掉。',
+    '治安部宣布本周加强巡逻——理由是「预防性排查」。'
+  ];
+
+  const rentAmt = RENTS[Math.min(S.rentWeeks, RENTS.length-1)];
+  modal(`<div class="mh">晨报 · DAY ${S.day} · 房租倒计时 ${S.nextRentDay - S.day} 天</div>
+    <div class="mb">
+      <h4>${pick(headlines)}</h4>
+      <p class="small" style="margin-top:6px">今日物价波动</p>
+      <ul>${hype}</ul>
+      ${S.inspectDay?`<p style="margin-top:12px;color:#8dc0ff">⚠ 治安部第七小队在甲板巡逻。<br>
+        今天柜台上的东西，会被看见。</p>`:''}
+      <div class="kv" style="margin-top:12px">
+        <span>今日顾客</span><span>预计 ${S.queue} 位</span>
+        <span>本周房租</span><span>${money(rentAmt)} · D${S.nextRentDay}</span>
+      </div>
+    </div>
+    <div class="mf"><button class="btn primary" onclick="closeModal()">拉开卷帘门</button></div>`);
+  log(`第 ${S.day} 天，开门。`, 'sys');
+  render();
+}
+
+function nightPhase(){
+  if(S.phase === 'deal') { /* allow */ }
+  S.phase = 'idle'; S.cust = null; S.nego = null; S.pickUid = null;
+  modal(`<div class="mh">闭店 · 夜间行动</div>
+    <div class="mb">
+      <h4>卷帘门落下，站内广播换成了低频嗡鸣。</h4>
+      <p>夜里能做一件事。选错不要紧，但房租不会等你。</p>
+      <div class="btn-row" style="margin-top:14px;flex-direction:column;align-items:stretch">
+        <button class="btn" onclick="doNight('scav')">去下层舱段拾荒 <span class="small">— 有货，有风险</span></button>
+        <button class="btn" onclick="doNight('rest')">低调休整 <span class="small">— 热度 −10，治安声望 +2</span></button>
+        <button class="btn" onclick="doNight('fix')">修整柜台 <span class="small">— 柜台容量 +1（上限 6）</span></button>
+        <button class="btn ghost" onclick="doNight('none')">什么都不做 <span class="small">— 稳妥</span></button>
+      </div>
+    </div>`);
+}
+
+function doNight(kind){
+  closeModal();
+  let text = '';
+  if(kind === 'scav'){
+    const n = ri(2,3);
+    const pool = ['scrap','scrap','water_dirty','battery','noodles','bandage','chip','brew','cigarettes','water_pure','meds'];
+    let got = [];
+    for(let i=0;i<n;i++){
+      if(S.stock.store.length >= S.caps.store) break;
+      const it = makeItem(pick(pool), {stolen: Math.random()<0.08});
+      it.revealed = true;
+      S.stock.store.push(it);
+      got.push(it.def.n);
+    }
+    S.heat += 5;
+    const hurt = Math.random() < 0.22;
+    if(hurt){
+      const cost = ri(40,90);
+      S.credits -= cost;
+      text = `通风管里踩空了一脚。你带回了 ${got.join('、')}，但医疗费花掉 ${money(cost)}。`;
+      S.rep.rebel += 1;
+    } else {
+      text = `你在塌了一半的货舱里翻出 ${got.join('、')||'一堆没用的东西'}。热度 +5。`;
+    }
+    log(`夜间拾荒：${got.join('、')||'空手而归'}。`, hurt?'warn':'');
+  } else if(kind === 'rest'){
+    S.heat = Math.max(0, S.heat - 10);
+    S.rep.guard += 2;
+    text = '你关掉招牌灯，煮了壶水，什么也没卖。走廊安静得像没人住。热度 −10。';
+    log('低调休整，热度 −10。', 'good');
+  } else if(kind === 'fix'){
+    if(S.caps.shelf >= 6){ text = '柜台已经撑到极限了，再加一块板就要塌。'; }
+    else { S.caps.shelf++; text = '你把一块废舱门板焊上柜台，多出了一个展示位。柜台容量 +1。'; log('柜台加宽，容量 +1。','good'); }
+  } else {
+    text = '你数了两遍钱，然后关灯。';
+  }
+  modal(`<div class="mh">夜间</div><div class="mb"><p>${text}</p></div>
+    <div class="mf"><button class="btn primary" onclick="closeModal();settle()">入睡</button></div>`);
+}
+
+function settle(){
+  // 房租
+  if(S.day >= S.nextRentDay){
+    const amt = RENTS[Math.min(S.rentWeeks, RENTS.length-1)];
+    if(S.credits >= amt){
+      S.credits -= amt;
+      S.rentWeeks++;
+      S.nextRentDay += WEEK;
+      log(`交房租 ${money(amt)}。房东在收据背面画了个勾。`, 'sys');
+    } else {
+      gameOver('房租交不上', `房东带着两个穿着外骨骼的人来了。他们没有吵，只是把你的柜台一件件搬空，然后贴上封条。<br><br>你欠了 <b>${money(amt - S.credits)}</b>。`);
+      return;
+    }
+  }
+  // 热度自然回落
+  S.heat = Math.max(0, S.heat - 2);
+
+  // 搜查
+  const raidChance = 0.04 + S.heat/240;
+  if(Math.random() < raidChance){ doRaid(); return; }
+  afterNight();
+}
+
+function doRaid(){
+  const bad = [...S.stock.shelf, ...S.stock.store].filter(i=>i.def.ill>0 || i.stolen);
+  if(!bad.length){
+    S.heat = Math.max(0, S.heat - 6);
+    S.rep.guard -= 1;
+    modal(`<div class="mh">突击检查</div><div class="mb">
+      <h4>治安队踹开了卷帘门</h4>
+      <p>他们翻遍了柜台和仓库，什么也没找到。领头的看了你一眼，把一叠罚单摔在桌上，又收了回去。</p>
+      <p class="small" style="margin-top:8px">「下次别让我白跑。」</p></div>
+      <div class="mf"><button class="btn primary" onclick="closeModal();afterNight()">继续</button></div>`);
+    log('突击检查，一无所获。热度 −6。', 'warn');
+    return;
+  }
+  let fine = 0;
+  const names = [];
+  bad.forEach(it=>{
+    fine += 45 + it.def.ill*35 + (it.stolen?50:0);
+    names.push(it.def.n);
+    removeItem(it.uid);
+  });
+  fine = Math.min(fine, 320);
+  S.credits -= fine;
+  S.rep.guard -= 6;
+  S.heat = Math.max(0, S.heat - 18);
+  modal(`<div class="mh">突击检查</div><div class="mb">
+    <h4>执法灯把整间铺子照成惨白</h4>
+    <p>他们掀开柜台、撬开仓库的锁，把东西一件件扔进证物袋。暗格的钢板纹丝不动。</p>
+    <div class="kv">
+      <span>没收</span><span class="neg">${names.join('、')}</span>
+      <span>罚款</span><span class="neg">−${money(fine)}</span>
+      <span>治安声望</span><span class="neg">−6</span>
+      <span>热度</span><span class="pos">−18</span>
+    </div>
+    <p class="small" style="margin-top:10px">暗格里的东西，才是真正属于你的。</p>
+  </div><div class="mf"><button class="btn primary" onclick="closeModal();afterNight()">熬到天亮</button></div>`);
+  log(`突击检查：没收 ${names.join('、')}，罚款 ${money(fine)}。`, 'bad');
+}
+
+function afterNight(){
+  if(S.credits < 0){ gameOver('破产', '账本上的数字变成了负数。房东不再接你的通讯，柜台被抵押给了清道夫。'); return; }
+  if(S.rep.guard <= 0){ gameOver('治安部查封', '治安声望跌到谷底。他们甚至不需要理由，一纸《危害站内秩序》就贴在了你的卷帘门上。'); return; }
+  if(S.credits >= S.target){
+    modal(`<div class="mh">机会 · BUYOUT</div><div class="mb">
+      <h4>房东联系了你</h4>
+      <p>「铺子可以卖你，${money(S.target)}，一次付清。你也可以继续租，我不拦。」</p>
+      <p class="small" style="margin-top:8px">买下店铺 = 通关（普通好结局）。</p>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn primary" onclick="buyShop()">买下这间铺子（−${money(S.target)}）</button>
+        <button class="btn ghost" onclick="closeModal();startDay()">继续经营</button>
+      </div></div>`);
+    return;
+  }
+  startDay();
+}
+function buyShop(){
+  closeModal();
+  S.credits -= S.target;
+  win('赎回店铺', `你在合同最后一页签了名。房东把钥匙推过来，金属在柜台上刮出一道白印。<br><br>
+    这间铺子从此是你的。墙上的弹孔、暗格里的货、柜台后的血迹——都是你的了。<br><br>
+    <span class="dim">你用了 ${S.day} 天，赚到 ${money(S.target)}。</span>`);
+}
+
+function gameOver(title, text){
+  S.over = true;
+  modal(`<div class="mh">GAME OVER</div><div class="mb">
+    <h4>${title}</h4><p>${text}</p>
+    <div class="kv" style="margin-top:12px">
+      <span>撑到</span><span>DAY ${S.day}</span>
+      <span>最终资产</span><span>${money(S.credits)}</span>
+      <span>热度</span><span>${S.heat|0}</span>
+    </div></div>
+    <div class="mf"><button class="btn primary" onclick="location.reload()">重新开始</button></div>`);
+  log(`游戏结束：${title}。`, 'bad');
+  render();
+}
+function win(title, text){
+  S.over = true;
+  modal(`<div class="mh">ENDING · 普通好结局</div><div class="mb">
+    <h4>${title}</h4><p>${text}</p>
+    <div class="kv" style="margin-top:12px">
+      <span>治安声望</span><span>${Math.round(S.rep.guard)}</span>
+      <span>反抗军声望</span><span>${Math.round(S.rep.rebel)}</span>
+      <span>黑市声望</span><span>${Math.round(S.rep.black)}</span>
+      <span>热度</span><span>${S.heat|0}</span>
+    </div></div>
+    <div class="mf"><button class="btn primary" onclick="location.reload()">再来一局</button></div>`);
+  log('结局：买下了店铺。', 'good');
+  render();
+}
+
+/* ---------- 弹窗 ---------- */
+function modal(html){
+  $('#modal-root').innerHTML = `<div class="overlay"><div class="mcard">${html}</div></div>`;
+}
+function closeModal(){ $('#modal-root').innerHTML = ''; }
+
+/* ---------- 帮助 ---------- */
+function help(){
+  modal(`<div class="mh">玩法说明 · HOW TO PLAY</div>
+    <div class="mb">
+      <h4>你是这间当铺的老板</h4>
+      <p>目标：在房租把你压死之前，攒够 ${money(S.target)} 买下店铺。</p>
+      <ul>
+        <li><b>接待</b>：每位顾客不是来卖货，就是来买货。卖货的人会虚报价值，买货的人有预算上限。</li>
+        <li><b>鉴定</b>：点击「色卡比对 / 印刷字口 / 防伪标 / 封装压痕」翻开线索，再决定出价。赝品真实价值只有一成。</li>
+        <li><b>议价</b>：出价低于对方底线会被还价，每次还价消耗耐心，耐心见底人就走了。</li>
+        <li><b>举报</b>：赃物、通缉犯、AUG 伪人都能换赏金。误报要罚款。</li>
+        <li><b>热度</b>：卖违禁品、赃物、贴假标都会涨热度。热度越高，突击检查越频繁。</li>
+        <li><b>暗格</b>：搜查只翻柜台和仓库，暗格永远不会被打开。违禁品请务必藏进去。</li>
+        <li><b>巡查日</b>：晨报会提前警告。那天别把违禁品摆在柜台上。</li>
+        <li><b>闭店</b>：每天夜里可以拾荒、休整或修柜台，然后结算房租。</li>
+      </ul>
+    </div>
+    <div class="mf"><button class="btn primary" onclick="closeModal();if(S.day===0)startDay()">开工</button></div>`);
+}
+
+/* ---------- 启动 ---------- */
+function boot(){
+  // 初始库存
+  ['water_pure','bandage','cigarettes'].forEach((k,i)=>{
+    const it = makeItem(k, {fake:false, stolen:false});
+    it.revealed = true;
+    it.price = Math.round(claimVal(it) * 1.18);
+    S.stock.shelf.push(it);
+  });
+  S.stock.store.push((()=>{ const it = makeItem('scrap',{fake:false,stolen:false}); it.revealed=true; return it; })());
+  log('你接手了第十四号铺位，欠着房东一笔钱。', 'sys');
+
+  modal(`<div class="mh">深空当铺 · PROBABLY STOLEN</div>
+    <div class="mb">
+      <h4 style="letter-spacing:.24em;font-size:16px">DECK-7 · UNIT 14</h4>
+      <p>空间站底层，卷帘门后面只有一张柜台、一盏紫外灯，和一台会漏电的验货台。</p>
+      <p style="margin-top:8px">你借了钱租下这里。每周交一次房租，交不上就滚。</p>
+      <p style="margin-top:8px">来的人带来的东西大多不干净——假货、赃物、违禁品，还有披着人皮的 AI。</p>
+      <div class="kv" style="margin-top:14px">
+        <span>目标</span><span>攒够 ${money(S.target)} 买下店铺</span>
+        <span>起点</span><span>${money(S.credits)} · 七天后第一次房租</span>
+      </div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn primary" onclick="closeModal();startDay()">开门营业</button>
+        <button class="btn ghost" onclick="closeModal();help()">看规则</button>
+      </div>
+    </div>`);
+  render();
+}
+boot();
+</script>
+</body>
+</html>
