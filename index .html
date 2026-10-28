@@ -334,6 +334,80 @@ body{font-size:15.5px;line-height:1.6}
   .cust-line{font-size:12.5px}
   .bench{grid-template-columns:1fr}
   .bench-art svg{width:96px;height:96px}
+  .corridor{height:70px}
+}
+/* ==================== 开局画面 ==================== */
+#title-screen{position:fixed;inset:0;z-index:400;display:none;overflow:hidden;
+  background:
+    radial-gradient(900px 600px at 50% 76%,rgba(66,232,212,.10),transparent 65%),
+    radial-gradient(720px 500px at 84% 10%,rgba(255,79,154,.10),transparent 62%),
+    radial-gradient(600px 420px at 8% 92%,rgba(255,190,77,.07),transparent 65%),
+    #05070c}
+#title-screen.on{display:block;animation:fadeIn .45s ease-out}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.title-inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;padding:26px;text-align:center}
+.t-kicker{font-size:10.5px;letter-spacing:.42em;color:#4b5464}
+.t-name{font-size:clamp(40px,7.4vw,76px);letter-spacing:.2em;color:#eaf4ff;line-height:1.15;
+  text-shadow:0 0 26px rgba(66,232,212,.55),0 0 70px rgba(255,79,154,.25),0 3px 0 rgba(0,0,0,.9);
+  animation:flicker 6.5s infinite}
+.t-sub{font-size:clamp(11px,1.5vw,16px);letter-spacing:.52em;color:var(--magenta);
+  text-shadow:0 0 18px rgba(255,79,154,.55);margin-top:-2px}
+.t-rule{width:min(340px,72vw);height:1px;margin:12px 0 4px;
+  background:linear-gradient(90deg,transparent,rgba(66,232,212,.7),transparent)}
+.t-line{max-width:540px;font-size:13.5px;color:#8b98a9;line-height:2}
+.t-menu{display:flex;flex-direction:column;gap:9px;margin-top:20px;width:min(320px,86vw)}
+.t-menu .btn{width:100%;justify-content:center;letter-spacing:.16em}
+.t-foot{position:absolute;left:0;right:0;bottom:16px;text-align:center;
+  font-size:9.5px;letter-spacing:.24em;color:#39424f}
+.t-scan{position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 4px);opacity:.55}
+.t-glow{position:absolute;left:50%;top:62%;width:660px;height:240px;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(66,232,212,.16),transparent);filter:blur(8px);pointer-events:none}
+@keyframes flicker{
+  0%,91%,100%{opacity:1}
+  92%{opacity:.32}93%{opacity:1}94%{opacity:.5}95%{opacity:1}
+  96%{opacity:.72}97%{opacity:1}
+}
+/* ==================== 走廊（柜台前的行人） ==================== */
+.corridor{position:relative;height:88px;margin-top:14px;overflow:hidden;
+  border:1px solid var(--line);background:linear-gradient(180deg,#080b11 0%,#0e131d 58%,#141a27 100%)}
+.corridor::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;
+  background:repeating-linear-gradient(90deg,#1a2130 0 16px,transparent 16px 44px);opacity:.8}
+.corridor::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(66,232,212,.55),rgba(255,79,154,.45),transparent);
+  box-shadow:0 0 14px rgba(66,232,212,.35)}
+.corridor-label{position:absolute;left:12px;top:7px;z-index:3;font-size:9.5px;letter-spacing:.28em;color:#39424f}
+.corridor-label b{color:var(--cyan);font-weight:400;opacity:.75}
+.walkerLayer{position:absolute;inset:0;z-index:2}
+.walker{position:absolute;bottom:5px;left:-100px;animation-name:cross;animation-timing-function:linear;
+  animation-fill-mode:forwards;filter:drop-shadow(0 6px 7px rgba(0,0,0,.65))}
+.walker svg{width:100%;height:100%;display:block}
+.walker.rev{animation-name:crossRev}
+@keyframes cross{from{left:-100px}to{left:100%}}
+@keyframes crossRev{from{left:100%}to{left:-100px}}
+/* ==================== 交互动效 ==================== */
+.anim-in{animation:custIn .48s cubic-bezier(.2,.7,.3,1)}
+@keyframes custIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+.clue.new{animation:clueIn .42s ease-out}
+@keyframes clueIn{from{opacity:0;transform:translateY(-7px) scale(.985)}to{opacity:1;transform:none}}
+.deal{animation:dealIn .42s ease-out}
+@keyframes dealIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.pulse{animation:numPulse .55s ease-out}
+@keyframes numPulse{0%{color:#fff;text-shadow:0 0 16px rgba(110,231,160,.95);transform:scale(1.08)}100%{transform:none}}
+.pickrow{transition:border-color .18s,background .18s}
+.srow{transition:background .18s}
+#redFlash{position:fixed;inset:0;z-index:490;pointer-events:none;opacity:0;
+  background:radial-gradient(120% 90% at 50% 38%,rgba(255,91,77,.30),transparent 68%)}
+#redFlash.on{animation:redFlash .75s ease-out}
+@keyframes redFlash{0%{opacity:0}16%{opacity:1}100%{opacity:0}}
+#toast{position:fixed;left:50%;bottom:28px;z-index:600;transform:translate(-50%,10px);
+  background:rgba(12,16,24,.97);border:1px solid var(--line2);border-left:2px solid var(--cyan);
+  padding:10px 20px;font-size:12.5px;color:#d9e5f2;opacity:0;pointer-events:none;transition:.25s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:600px){
+  .t-line{font-size:12.5px}
+  .t-name{letter-spacing:.12em}
 }
 </style>
 </head>
@@ -346,7 +420,13 @@ body{font-size:15.5px;line-height:1.6}
     </div>
     <div class="stats" id="stats"></div>
     <div class="reps" id="reps"></div>
+    <button class="btn sm" onclick="manualSave()" style="align-self:center">存档</button>
     <button class="btn sm" onclick="help()" style="align-self:center">帮助</button>
+  </div>
+
+  <div class="corridor" id="corridor">
+    <div class="corridor-label">CORRIDOR · DECK-7 <b>// 走廊</b></div>
+    <div class="walkerLayer" id="walkerLayer"></div>
   </div>
 
   <div class="grid">
@@ -368,6 +448,9 @@ body{font-size:15.5px;line-height:1.6}
 </div>
 
 <div id="modal-root"></div>
+<div id="redFlash"></div>
+<div id="toast"></div>
+<div id="title-screen"></div>
 
 <script>
 /* =========================================================
@@ -580,7 +663,8 @@ const S = {
   caps:{shelf:4,store:14,hidden:3},
   market:{}, inspectDay:false, officerDone:false,
   queue:5, served:0, phase:'idle', cust:null, nego:null, pickUid:null,
-  rentWeeks:0, nextRentDay:7, uid:1, log:[], tab:'shelf', deal:null, over:false
+  rentWeeks:0, nextRentDay:7, uid:1, log:[], tab:'shelf', deal:null, over:false,
+  animCust:false, flashClue:-1, _lastCredits:undefined
 };
 const RENTS = [260,340,440,560,700,860];
 const WEEK = 7;
@@ -639,13 +723,16 @@ function render(){
   renderCounter();
   renderStock();
   renderLog();
+  S.animCust = false;
+  S.flashClue = -1;
 }
 function renderStats(){
   const rentLeft = S.nextRentDay - S.day;
   const rentAmt = RENTS[Math.min(S.rentWeeks, RENTS.length-1)];
+  const gained = S._lastCredits !== undefined && S.credits > S._lastCredits;
   $('#stats').innerHTML = `
     <div class="stat"><span class="k">DAY</span><b>D${String(S.day).padStart(2,'0')}</b></div>
-    <div class="stat"><span class="k">信用点</span><b class="${S.credits<40?'warn':''}">${money(S.credits)}</b></div>
+    <div class="stat"><span class="k">信用点</span><b class="${S.credits<40?'warn':''}${gained?' pulse':''}">${money(S.credits)}</b></div>
     <div class="stat"><span class="k">热度 ${S.heat|0}</span>
       <div class="heatbar"><i style="width:${clamp(S.heat,0,100)}%"></i></div></div>
     <div class="stat"><span class="k">房租 D${S.nextRentDay}</span><b class="${rentLeft<=1?'warn':''}">${money(rentAmt)} · ${rentLeft}天</b></div>`;
@@ -654,6 +741,7 @@ function renderStats(){
     <div class="rep g">治安 <b>${Math.round(r.guard)}</b></div>
     <div class="rep r">反抗军 <b>${Math.round(r.rebel)}</b></div>
     <div class="rep b">黑市 <b>${Math.round(r.black)}</b></div>`;
+  S._lastCredits = S.credits;
 }
 
 function renderCounter(){
@@ -696,7 +784,7 @@ function renderCounter(){
 }
 
 function customerCard(c){
-  return `<div class="cust">
+  return `<div class="cust${S.animCust?' anim-in':''}">
     <div class="cust-art">${pix('person', c.pal)}</div>
     <div class="cust-info">
       <div class="cust-top">
@@ -723,7 +811,7 @@ function counterBody(){
 /* ---------- 卖家（顾客出货） ---------- */
 function sellerBody(c){
   const it = c.item;
-  const shown = it.clues.map((cl,i)=> it.seen[i] ? clueCard(cl) : '').join('');
+  const shown = it.clues.map((cl,i)=> it.seen[i] ? clueCard(cl,i) : '').join('');
   const nSeen = it.seen.filter(Boolean).length;
 
   let negoHtml = '';
@@ -758,12 +846,12 @@ function sellerBody(c){
   <div class="clue-list">${shown || `<div class="empty">还没有任何线索。鉴定是这行的命。</div>`}</div>
   ${negoHtml}`;
 }
-function clueCard(cl){
+function clueCard(cl, i){
   let cls = '';
   if(cl.ok === false) cls = 'bad';
   else if(cl.ok === true) cls = 'good';
   else if(cl.ok === 'stolen') cls = 'warn';
-  return `<div class="clue ${cls}">
+  return `<div class="clue ${cls}${S.flashClue===i?' new':''}">
     <div class="clue-vis">${clueVisual(cl)}</div>
     <div><div class="clue-t">${cl.t}</div><div>${cl.d}</div></div>
   </div>`;
@@ -917,6 +1005,7 @@ function inspectClue(i){
   const c = S.cust;
   if(!c || c.mode!=='sell' || !c.item) return;
   c.item.seen[i] = true;
+  S.flashClue = i;
   render();
 }
 function pickShelf(uid){
@@ -1012,6 +1101,7 @@ function nextCustomer(){
   }
   S.cust = genCustomer();
   S.phase = 'cust'; S.nego = null; S.pickUid = null;
+  S.animCust = true;
   // 治安官到场：检查柜台
   if(S.cust.type === 'officer') officerSearch();
   render();
@@ -1023,6 +1113,7 @@ function officerSearch(){
     log('治安官扫了一眼柜台，什么都没说。', 'sys');
     return;
   }
+  flashRed();
   let fine = 0;
   bad.forEach(it=>{
     fine += 55 + it.def.ill*25 + (it.stolen?40:0);
@@ -1144,6 +1235,7 @@ function finishDeal(){
   S.pickUid = null;
   S.phase = 'deal';
   S.served++;
+  saveGame(true);
   render();
 }
 
@@ -1253,6 +1345,7 @@ function startDay(){
     </div>
     <div class="mf"><button class="btn primary" onclick="closeModal()">拉开卷帘门</button></div>`);
   log(`第 ${S.day} 天，开门。`, 'sys');
+  saveGame(true);
   render();
 }
 
@@ -1336,6 +1429,7 @@ function settle(){
 }
 
 function doRaid(){
+  flashRed();
   const bad = [...S.stock.shelf, ...S.stock.store].filter(i=>i.def.ill>0 || i.stolen);
   if(!bad.length){
     S.heat = Math.max(0, S.heat - 6);
@@ -1399,6 +1493,7 @@ function buyShop(){
 
 function gameOver(title, text){
   S.over = true;
+  clearSave();
   modal(`<div class="mh">GAME OVER</div><div class="mb">
     <h4>${title}</h4><p>${text}</p>
     <div class="kv" style="margin-top:12px">
@@ -1406,12 +1501,13 @@ function gameOver(title, text){
       <span>最终资产</span><span>${money(S.credits)}</span>
       <span>热度</span><span>${S.heat|0}</span>
     </div></div>
-    <div class="mf"><button class="btn primary" onclick="location.reload()">重新开始</button></div>`);
+    <div class="mf"><button class="btn primary" onclick="restartGame()">重新开始</button></div>`);
   log(`游戏结束：${title}。`, 'bad');
   render();
 }
 function win(title, text){
   S.over = true;
+  clearSave();
   modal(`<div class="mh">ENDING · 普通好结局</div><div class="mb">
     <h4>${title}</h4><p>${text}</p>
     <div class="kv" style="margin-top:12px">
@@ -1420,7 +1516,7 @@ function win(title, text){
       <span>黑市声望</span><span>${Math.round(S.rep.black)}</span>
       <span>热度</span><span>${S.heat|0}</span>
     </div></div>
-    <div class="mf"><button class="btn primary" onclick="location.reload()">再来一局</button></div>`);
+    <div class="mf"><button class="btn primary" onclick="restartGame()">再来一局</button></div>`);
   log('结局：买下了店铺。', 'good');
   render();
 }
@@ -1448,37 +1544,254 @@ function help(){
         <li><b>闭店</b>：每天夜里可以拾荒、休整或修柜台，然后结算房租。</li>
       </ul>
     </div>
-    <div class="mf"><button class="btn primary" onclick="closeModal();if(S.day===0)startDay()">开工</button></div>`);
+    <div class="mf"><button class="btn primary" onclick="closeModal()">${S.day===0?'知道了':'返回柜台'}</button></div>`);
 }
 
-/* ---------- 启动 ---------- */
-function boot(){
-  // 初始库存
-  ['water_pure','bandage','cigarettes'].forEach((k,i)=>{
+/* =========================================================
+   开局画面 · 故事 · 存档 · 走廊行人
+   ========================================================= */
+const STORY = [
+  {t:'你买下了一间不该存在的铺子',
+   b:'第 7 层甲板的尽头，卷帘门上还留着上一任老板的血手印。中介说这里死过人，所以便宜。你说，便宜就好。'},
+  {t:'房租每周一结',
+   b:'房东是个从不下船的女人。她只留一句话：「交不上，我就把你连柜台一起扔进货舱。」你算了算，七天后是第一次。'},
+  {t:'这行没有干净的货',
+   b:'假货、赃物、违禁品，还有披着人皮的机器。你得靠灯、靠眼、靠一点运气分辨——看错了赔钱，看对了赚命。'},
+  {t:'但你想把这里变成自己的',
+   b:`目标很简单：攒够 ${money(S.target)}，把这间铺子买下来。然后，再决定要不要继续当一个当铺老板。`}
+];
+
+let walkerTimer = null, toastTimer = null;
+
+function toast(msg){
+  const el = $('#toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('on'), 1900);
+}
+function flashRed(){
+  const f = $('#redFlash');
+  if(!f) return;
+  f.classList.remove('on');
+  void f.offsetWidth;
+  f.classList.add('on');
+}
+
+/* ---------- 走廊行人 ---------- */
+const WALK_PALS = ['gray','olive','blue','magenta','amber','cyan','purple','red','green'];
+function spawnWalker(){
+  const layer = $('#walkerLayer');
+  if(!layer) return;
+  const size = ri(26,52), dur = rnd(6.5,12.5), rev = Math.random() < 0.45;
+  const el = document.createElement('div');
+  el.className = 'walker' + (rev ? ' rev' : '');
+  el.style.width = size + 'px';
+  el.style.height = size + 'px';
+  el.style.bottom = ri(2,10) + 'px';
+  el.style.opacity = rnd(.35,.85).toFixed(2);
+  el.style.animationDuration = dur.toFixed(1) + 's';
+  el.innerHTML = pix('person', pick(WALK_PALS));
+  layer.appendChild(el);
+  setTimeout(()=>el.remove(), dur*1000 + 400);
+}
+function walkLoop(){
+  if(!document.hidden){
+    spawnWalker();
+    if(Math.random() < 0.35) setTimeout(spawnWalker, ri(280,900));
+  }
+  walkerTimer = setTimeout(walkLoop, ri(1700,4600));
+}
+function startWalkers(){
+  if(walkerTimer) return;
+  for(let i=0;i<3;i++) setTimeout(spawnWalker, i*650);
+  walkerTimer = setTimeout(walkLoop, 1400);
+}
+
+/* ---------- 存档 ---------- */
+const SAVE_KEY = 'pss_save_v3';
+function packItem(it){
+  return {u:it.uid, d:it.defId, f:it.fake?1:0, t:it.stolen?1:0,
+    q:Math.round(it.quality*1000)/1000, r:it.revealed?1:0, p:it.price,
+    c:it.clues, v:it.seen};
+}
+function unpackItem(o){
+  const def = DEFS[o.d];
+  if(!def) return null;
+  return {uid:o.u, defId:o.d, def, fake:!!o.f, stolen:!!o.t,
+    quality:o.q, revealed:!!o.r, price:o.p, clues:o.c, seen:o.v};
+}
+function readSave(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return null;
+    const d = JSON.parse(raw);
+    return d && d.v === 3 ? d : null;
+  }catch(e){ return null; }
+}
+function hasSave(){ return !!readSave(); }
+function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+
+function saveGame(quiet){
+  if(S.over || S.day === 0) return false;
+  try{
+    const data = {
+      v:3, day:S.day, credits:S.credits, heat:S.heat, target:S.target,
+      rep:S.rep, caps:S.caps, market:S.market,
+      inspectDay:S.inspectDay, officerDone:S.officerDone,
+      queue:S.queue, served:S.served,
+      rentWeeks:S.rentWeeks, nextRentDay:S.nextRentDay,
+      uid:S.uid, log:S.log, tab:S.tab,
+      shelf:S.stock.shelf.map(packItem),
+      store:S.stock.store.map(packItem),
+      hidden:S.stock.hidden.map(packItem)
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    if(!quiet) toast(`已存档 · DAY ${S.day}`);
+    return true;
+  }catch(e){
+    if(!quiet) toast('存档失败：浏览器拒绝了写入');
+    return false;
+  }
+}
+function loadGame(){
+  const d = readSave();
+  if(!d) return false;
+  S.day = d.day; S.credits = d.credits; S.heat = d.heat;
+  S.target = d.target || 1000;
+  S.rep = d.rep; S.caps = d.caps; S.market = d.market || {};
+  S.inspectDay = !!d.inspectDay; S.officerDone = !!d.officerDone;
+  S.queue = d.queue; S.served = d.served;
+  S.rentWeeks = d.rentWeeks; S.nextRentDay = d.nextRentDay;
+  S.uid = d.uid; S.log = d.log || []; S.tab = d.tab || 'shelf';
+  S.stock = {
+    shelf:(d.shelf||[]).map(unpackItem).filter(Boolean),
+    store:(d.store||[]).map(unpackItem).filter(Boolean),
+    hidden:(d.hidden||[]).map(unpackItem).filter(Boolean)
+  };
+  S.phase = 'idle'; S.cust = null; S.nego = null;
+  S.pickUid = null; S.deal = null; S.over = false;
+  S.animCust = false; S.flashClue = -1; S._lastCredits = S.credits;
+  closeModal();
+  return true;
+}
+function manualSave(){ saveGame(false); }
+
+function resetState(){
+  S.day = 0; S.credits = 220; S.heat = 12; S.target = 1000;
+  S.rep = {guard:50, rebel:40, black:35};
+  S.stock = {shelf:[], store:[], hidden:[]};
+  S.caps = {shelf:4, store:14, hidden:3};
+  S.market = {}; S.inspectDay = false; S.officerDone = false;
+  S.queue = 5; S.served = 0; S.phase = 'idle';
+  S.cust = null; S.nego = null; S.pickUid = null;
+  S.rentWeeks = 0; S.nextRentDay = 7; S.uid = 1;
+  S.log = []; S.tab = 'shelf'; S.deal = null; S.over = false;
+  S.animCust = false; S.flashClue = -1; S._lastCredits = undefined;
+}
+
+/* ---------- 开局画面 ---------- */
+function titleOn(){
+  const t = $('#title-screen');
+  return !!t && t.classList.contains('on');
+}
+function showTitle(){
+  closeModal();
+  const cont = hasSave();
+  const el = $('#title-screen');
+  el.classList.add('on');
+  el.innerHTML = `
+    <div class="t-scan"></div>
+    <div class="t-glow"></div>
+    <div class="title-inner">
+      <div class="t-kicker">DECK-7 · UNIT 14 · PAWN &amp; EXCHANGE</div>
+      <div class="t-name">深空当铺</div>
+      <div class="t-sub">PROBABLY STOLEN</div>
+      <div class="t-rule"></div>
+      <div class="t-line">空间站最底层，卷帘门后只有一张柜台、一盏紫外灯，<br>和一台会漏电的验货台。</div>
+      <div class="t-menu">
+        <button class="btn primary" onclick="newGame()">${cont ? '开始新的一局' : '开门营业'}</button>
+        ${cont ? `<button class="btn" onclick="continueGame()">继续上一局</button>` : ''}
+        <button class="btn ghost" onclick="showStory(0,'read')">故事简介</button>
+        <button class="btn ghost" onclick="help()">玩法说明</button>
+      </div>
+      <div class="t-foot">单文件原型 · DEMO 1.0 · 进度自动保存在本机</div>
+    </div>`;
+}
+function newGame(){
+  if(hasSave()){
+    modal(`<div class="mh">开始新的一局</div><div class="mb">
+      <p>上一局的存档会被覆盖。</p></div>
+      <div class="mf">
+        <button class="btn danger" onclick="closeModal();beginRun()">覆盖并开始</button>
+        <button class="btn ghost" onclick="closeModal()">取消</button>
+      </div>`);
+    return;
+  }
+  beginRun();
+}
+function beginRun(){
+  resetState();
+  clearSave();
+  ['water_pure','bandage','cigarettes'].forEach(k=>{
     const it = makeItem(k, {fake:false, stolen:false});
     it.revealed = true;
     it.price = Math.round(claimVal(it) * 1.18);
     S.stock.shelf.push(it);
   });
-  S.stock.store.push((()=>{ const it = makeItem('scrap',{fake:false,stolen:false}); it.revealed=true; return it; })());
+  const scrap = makeItem('scrap', {fake:false, stolen:false});
+  scrap.revealed = true;
+  S.stock.store.push(scrap);
   log('你接手了第十四号铺位，欠着房东一笔钱。', 'sys');
-
-  modal(`<div class="mh">深空当铺 · PROBABLY STOLEN</div>
-    <div class="mb">
-      <h4 style="letter-spacing:.24em;font-size:16px">DECK-7 · UNIT 14</h4>
-      <p>空间站底层，卷帘门后面只有一张柜台、一盏紫外灯，和一台会漏电的验货台。</p>
-      <p style="margin-top:8px">你借了钱租下这里。每周交一次房租，交不上就滚。</p>
-      <p style="margin-top:8px">来的人带来的东西大多不干净——假货、赃物、违禁品，还有披着人皮的 AI。</p>
-      <div class="kv" style="margin-top:14px">
-        <span>目标</span><span>攒够 ${money(S.target)} 买下店铺</span>
-        <span>起点</span><span>${money(S.credits)} · 七天后第一次房租</span>
-      </div>
-      <div class="btn-row" style="margin-top:16px">
-        <button class="btn primary" onclick="closeModal();startDay()">开门营业</button>
-        <button class="btn ghost" onclick="closeModal();help()">看规则</button>
-      </div>
-    </div>`);
+  const t = $('#title-screen');
+  t.classList.remove('on');
+  t.innerHTML = '';
   render();
+  showStory(0, 'new');
+}
+function continueGame(){
+  if(!loadGame()){ toast('存档读取失败'); showTitle(); return; }
+  const t = $('#title-screen');
+  t.classList.remove('on');
+  t.innerHTML = '';
+  render();
+  toast(`读取存档 · DAY ${S.day}`);
+}
+function restartGame(){
+  closeModal();
+  clearSave();
+  resetState();
+  render();
+  showTitle();
+}
+
+/* ---------- 故事简介 ---------- */
+function showStory(i, mode){
+  mode = mode || 'read';
+  i = clamp(i, 0, STORY.length-1);
+  const p = STORY[i];
+  const last = i === STORY.length-1;
+  const next = last
+    ? (mode === 'new' ? 'beginDayOne()' : 'closeStory()')
+    : `showStory(${i+1},'${mode}')`;
+  modal(`<div class="mh">故事简介 · ${i+1} / ${STORY.length}</div>
+    <div class="mb">
+      <h4>${p.t}</h4>
+      <p style="margin-top:6px">${p.b}</p>
+    </div>
+    <div class="mf">
+      ${i>0 ? `<button class="btn ghost" onclick="showStory(${i-1},'${mode}')">上一页</button>` : ''}
+      <button class="btn primary" onclick="${next}">${last ? (mode==='new' ? '开门营业' : '关掉') : '下一页'}</button>
+    </div>`);
+}
+function beginDayOne(){ closeModal(); startDay(); }
+function closeStory(){ closeModal(); }
+
+/* ---------- 启动 ---------- */
+function boot(){
+  showTitle();
+  startWalkers();
 }
 boot();
 </script>
