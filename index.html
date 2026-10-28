@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>深空当铺 · PROBABLY STOLEN</title>
+<title>星港当铺 · STARLANE PAWN</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -409,14 +409,74 @@ body{font-size:15.5px;line-height:1.6}
   .t-line{font-size:12.5px}
   .t-name{letter-spacing:.12em}
 }
+/* ==================== 身份选择 ==================== */
+.jobs{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.jobcard{display:block;width:100%;text-align:left;background:#161a24;border:1px solid var(--line);
+  padding:12px 15px;cursor:pointer;color:#d9e5f2;font-family:inherit;
+  transition:border-color .18s,background .18s,transform .18s}
+.jobcard:hover{border-color:var(--cyan);background:#1b2231;transform:translateX(3px)}
+.job-h{display:flex;justify-content:space-between;align-items:baseline}
+.job-h b{font-size:16.5px;letter-spacing:.14em;color:#eaf4ff}
+.job-h span{font-size:11px;color:var(--green)}
+.job-tag{font-size:11px;color:var(--magenta);letter-spacing:.08em;margin-top:2px}
+.job-d{font-size:12px;color:#8b98a9;line-height:1.8;margin-top:6px}
+/* ==================== 夜间拾荒 ==================== */
+.risk{margin-top:12px;padding:10px 13px;border:1px solid var(--line);border-left:2px solid #ffbe4d;
+  background:#10141c;font-size:12px;line-height:1.9;color:#a8b4c4}
+.clues{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.risk .good{color:#6ee7a0}
+.risk .bad{color:#ff9a8f}
+.tag.sus{background:#3a2a12;color:#ffc46b;border-color:#5a4118}
+.loot{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:6px;max-height:220px;overflow:auto}
+.loot li{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;
+  padding:5px 9px;background:#141922;border-left:2px solid var(--line2)}
+/* 手动拾取：背包栏 + 废物堆 */
+.bagbar{border:1px solid var(--line);background:#0c1017;padding:9px 11px}
+.bagbar-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;
+  font-size:10px;letter-spacing:.14em;color:var(--dim)}
+.bagbar-h b{color:var(--cyan);font-size:13px;letter-spacing:0}
+.bagbar-h span{letter-spacing:.04em;color:var(--dim2);font-size:9.5px}
+.bagslots{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:8px}
+@media (max-width:600px){.bagslots{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.bagitem{font:inherit;font-size:10px;text-align:left;background:#141a26;border:1px solid var(--line2);
+  color:#c3cfdd;padding:5px 6px;display:flex;justify-content:space-between;align-items:center;
+  gap:4px;min-height:30px;line-height:1.35;cursor:pointer;transition:.14s}
+.bagitem span{color:#ff9a8f;flex:0 0 auto}
+.bagitem:hover{border-color:var(--red);color:#ffd6d6}
+.bagitem.empty{color:#3b4453;border-style:dashed;cursor:default;justify-content:center}
+.piles{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;max-height:308px;overflow:auto;padding-right:3px}
+@media (max-width:600px){.piles{grid-template-columns:1fr}}
+.pile{font:inherit;text-align:left;display:flex;align-items:center;gap:8px;background:#111620;
+  border:1px solid var(--line);color:#9fadbe;padding:7px 9px;min-height:54px;cursor:pointer;transition:.14s}
+.pile:hover{border-color:var(--cyan);background:#151d2b}
+.pile .q{flex:0 0 auto;width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  border:1px dashed var(--line2);color:var(--dim2);font-size:12px}
+.pile .pl{flex:1;font-size:11.5px;line-height:1.4;min-width:0}
+.pile .pa{font-size:9px;letter-spacing:.1em;color:var(--dim2);flex:0 0 auto}
+.pile.empty{cursor:default;opacity:.55}
+.pile.empty:hover{border-color:var(--line);background:#111620}
+.pile.open{cursor:default;background:#0f1420;border-left:2px solid var(--amber)}
+.pile.open:hover{border-color:var(--line);background:#0f1420}
+.pile.open svg{width:34px;height:34px;flex:0 0 auto}
+.pile.open .pi{flex:1;min-width:0}
+.pile.open .pn{font-size:11.5px;color:#e2ecf8}
+.pile.open .pv{font-size:10.5px;color:var(--dim);margin-top:2px}
+.pile.taken{opacity:.42;border-left-color:var(--line2)}
+.pile .take{font:inherit;font-size:10px;padding:4px 7px;background:#0e3335;border:1px solid #2f9b95;
+  color:#a9fff2;cursor:pointer;flex:0 0 auto;white-space:nowrap}
+.pile .take:hover{background:#14484a;box-shadow:0 0 12px rgba(66,232,212,.28)}
+.pile[disabled]{opacity:.35;cursor:not-allowed}
+.pile[disabled]:hover{border-color:var(--line);background:#111620}
+.pile .sta{font-size:9px;color:var(--amber);letter-spacing:.06em}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
     <div class="brand">
-      <b>深空当铺</b>
-      <span>PROBABLY STOLEN // DECK-7 · UNIT 14</span>
+      <b>星港当铺</b>
+      <span>STARLANE PAWN // DECK-7 · UNIT 14</span>
     </div>
     <div class="stats" id="stats"></div>
     <div class="reps" id="reps"></div>
@@ -454,7 +514,7 @@ body{font-size:15.5px;line-height:1.6}
 
 <script>
 /* =========================================================
-   深空当铺 Demo — 单文件原型
+   星港当铺 Demo — 单文件原型
    ========================================================= */
 const $ = s => document.querySelector(s);
 const rnd = (a,b) => a + Math.random()*(b-a);
@@ -566,7 +626,9 @@ const DEFS = {
   tool:{n:'维修工具组',cat:'工具',shape:'gear',pal:'gray',v:62,ill:0,unit:'套'},
   chip:{n:'拆机芯片',cat:'电子',shape:'chip',pal:'purple',v:78,ill:1,unit:'片'},
   nuke:{n:'核废料罐',cat:'危险',shape:'can',pal:'lime',v:210,ill:3,unit:'罐'},
-  idcard:{n:'过期身份卡',cat:'证件',shape:'chip',pal:'blue',v:46,ill:2,unit:'张'}
+  idcard:{n:'过期身份卡',cat:'证件',shape:'chip',pal:'blue',v:46,ill:2,unit:'张'},
+  ghost:{n:'幽灵水',cat:'水源',shape:'bottle',pal:'lime',v:88,ill:2,unit:'壶'},
+  contraband:{n:'违禁残件',cat:'军械',shape:'gear',pal:'red',v:165,ill:3,unit:'件'}
 };
 const CATS = ['水源','医疗','嗜好','食品','能源','材料','军械','工具','电子','危险','证件'];
 
@@ -632,6 +694,26 @@ const TYPES = {
     sell:['weapon','meds'],
     need:['医疗','军械'],budget:1.42,
     lines:['上面的封锁又收紧了，我需要补给。','现金，不记账，不问出处。','治安部在码头设卡，你最好也小心点。']},
+  miner:{label:'矿工',pal:'amber',mode:'sell',
+    sell:['scrap','battery','brew','water_dirty','noodles'],
+    need:['能源','材料'],budget:0.95,
+    lines:['三号矿带又塌了，我捡了点能卖的。','这电池是我自己攒的，你验吧。','手上的灰洗不掉，钱总得挣。'],
+    tells:['指甲缝里嵌着洗不掉的矿灰。','耳后有被辐射灼过的旧疤。']},
+  smuggler:{label:'走私客',pal:'purple',mode:'sell',
+    sell:['cigarettes','stim','weapon','chip','brew'],
+    need:['嗜好','军械'],budget:1.2,
+    lines:['别问船号，问就是没有。','这条线最近查得紧，快点。','货是好货，价是死价。'],
+    tells:['靴底沾着不属于本层的红泥。','他一进门先看了三处出口。']},
+  medic:{label:'义体医生',pal:'green',mode:'buy',
+    sell:['meds','stim','bandage','tool'],
+    need:['医疗','工具'],budget:1.08,
+    lines:['我需要一批能用的耗材。','上次你这里的绷带救过人。','价钱好说，别给我假货就行。'],
+    tells:['袖口有洗不掉的碘伏印。','手指关节是二手的，接缝处发亮。']},
+  clerk:{label:'议员助理',pal:'blue',mode:'buy',
+    sell:['idcard','chip','tool'],
+    need:['证件','电子'],budget:1.38,
+    lines:['清单上的东西，一样都不能少。','我不留名字，也不用收据。','这单办好了，以后还有单。'],
+    tells:['皮鞋一尘不染，站里的地板可没这么干净。','他付钱时用的是议会的定额卡。']},
   aug:{label:'???',pal:'cyan',mode:'sell',
     sell:['stim','chip','meds','nuke'],
     need:['水源','食品'],budget:1.0,
@@ -655,6 +737,16 @@ const AUG_TELLS = [
   '他的影子比灯光角度慢了半拍才挪过来。'
 ];
 
+/* ---------- 玩家身份（开局三选一） ---------- */
+const JOBS = {
+  appraiser:{name:'鉴定师',tag:'眼睛就是仪器',credits:210,
+    desc:'每件卖家货物进门，自动看清 1 处细节。<br>但你太诚实，卖价 −5%。'},
+  broker:{name:'掮客',tag:'你不验货，你只认识人',credits:340,
+    desc:'开局多 130 信用点，卖价 +12%，黑市声望 +5。<br>线索只能自己一条条看。'},
+  exguard:{name:'前治安官',tag:'你知道他们的排班',credits:180,
+    desc:'热度增长 −40%，罚款 −40%，治安声望 +8。<br>但黑市不待见你：收购价 +6%，黑市声望 −15。'}
+};
+
 /* ---------- 状态 ---------- */
 const S = {
   day:0, credits:220, heat:12, target:1000,
@@ -664,6 +756,8 @@ const S = {
   market:{}, inspectDay:false, officerDone:false,
   queue:5, served:0, phase:'idle', cust:null, nego:null, pickUid:null,
   rentWeeks:0, nextRentDay:7, uid:1, log:[], tab:'shelf', deal:null, over:false,
+  job:'appraiser', hp:100, wound:0,
+  gear:{torch:true, bag:false, bandage:1},
   animCust:false, flashClue:-1, _lastCredits:undefined
 };
 const RENTS = [260,340,440,560,700,860];
@@ -732,6 +826,8 @@ function renderStats(){
   const gained = S._lastCredits !== undefined && S.credits > S._lastCredits;
   $('#stats').innerHTML = `
     <div class="stat"><span class="k">DAY</span><b>D${String(S.day).padStart(2,'0')}</b></div>
+    <div class="stat"><span class="k">身份</span><b style="font-size:12.5px">${(JOBS[S.job]||JOBS.appraiser).name}</b></div>
+    <div class="stat"><span class="k">生命${S.wound>0?' · 带伤':''}</span><b class="${S.hp<40?'warn':''}">${S.hp}</b></div>
     <div class="stat"><span class="k">信用点</span><b class="${S.credits<40?'warn':''}${gained?' pulse':''}">${money(S.credits)}</b></div>
     <div class="stat"><span class="k">热度 ${S.heat|0}</span>
       <div class="heatbar"><i style="width:${clamp(S.heat,0,100)}%"></i></div></div>
@@ -755,7 +851,7 @@ function renderCounter(){
     const done = S.served >= S.queue;
     el.innerHTML = head + `
       <div class="idle">
-        <div class="shop-sign">UNIT 14 · PAWN & EXCHANGE</div>
+        <div class="shop-sign">STARLANE PAWN · UNIT 14</div>
         <div class="big">${done ? '今日的客人已经走完了。' : '柜台后面，卷帘门半开着。'}</div>
         <p>${done
           ? '清点一下库存，把违禁的东西塞进暗格，然后闭店。'
@@ -973,9 +1069,10 @@ function stockRow(it){
 
   const priceInput = S.tab === 'shelf'
     ? `<input class="priceIn" type="number" value="${it.price ?? Math.round(v*1.15)}" onchange="setPrice('${it.uid}',this.value)">`
-    : `<span class="small">值 ${money(v)}</span>`;
+    : `<span class="small">${it.revealed?'值 '+money(v):'未鉴定'}</span>`;
 
   const acts = [];
+  if(!it.revealed) acts.push(`<button class="mini" onclick="appraiseItem('${it.uid}')" style="color:#6ee7a0">鉴定</button>`);
   if(S.tab !== 'shelf') acts.push(`<button class="mini" onclick="moveTo('${it.uid}','shelf')">上架</button>`);
   if(S.tab !== 'store') acts.push(`<button class="mini" onclick="moveTo('${it.uid}','store')">入库</button>`);
   if(S.tab !== 'hidden') acts.push(`<button class="mini" onclick="moveTo('${it.uid}','hidden')">藏暗格</button>`);
@@ -1004,6 +1101,10 @@ function renderLog(){
 function inspectClue(i){
   const c = S.cust;
   if(!c || c.mode!=='sell' || !c.item) return;
+  if(!c.item.seen[i] && S.wound > 0 && Math.random() < 0.18){
+    const cl = c.item.clues[i];
+    c.item.clues[i] = Object.assign({}, cl, {ok:null, t:cl.t + '（手抖，没看清）'});
+  }
   c.item.seen[i] = true;
   S.flashClue = i;
   render();
@@ -1012,6 +1113,31 @@ function pickShelf(uid){
   S.pickUid = uid;
   S.nego = null;
   render();
+}
+function appraiseItem(uid){
+  const it = findItem(uid);
+  if(!it || it.revealed) return;
+  modal(`<div class="mh">鉴定 · APPRAISAL</div>
+    <div class="mb">
+      <p>你把${it.def.n}放到紫外灯下面。四条细节，自己看。</p>
+      <div class="clues">${it.clues.map((cl,i)=>clueCard(cl,i)).join('')}</div>
+      <p class="small" style="margin-top:10px">看完再决定：这东西留在手里，还是尽快出手。</p>
+    </div>
+    <div class="mf">
+      <button class="btn primary" onclick="finishAppraise('${uid}')">得出结论</button>
+      <button class="btn ghost" onclick="closeModal()">再放放</button>
+    </div>`);
+}
+function finishAppraise(uid){
+  const it = findItem(uid);
+  if(!it){ closeModal(); return; }
+  it.revealed = true;
+  it.susp = false;
+  if(it.price == null) it.price = Math.round(claimVal(it) * 1.15);
+  log(`鉴定 ${it.def.n}：${it.fake?'赝品':'真品'}${it.stolen?' · 赃物':''}。`, it.fake?'bad':'sys');
+  closeModal();
+  render();
+  toast(`鉴定结果：${it.fake?'赝品':'真品'}${it.stolen?' · 赃物':''}`);
 }
 function switchTab(k){ S.tab = k; render(); }
 
@@ -1058,12 +1184,17 @@ function genCustomer(){
   let type;
   if(S.inspectDay && !S.officerDone){ type = 'officer'; S.officerDone = true; }
   else {
-    const r = Math.random() + (S.day<=2 ? -0.12 : 0);
-    if(r < 0.30) type = 'drifter';
-    else if(r < 0.47) type = 'scav';
-    else if(r < 0.66) type = 'thief';
-    else if(r < 0.72) type = 'officer';
-    else if(r < 0.86) type = 'rebel';
+    const r = Math.random();
+    if(S.day <= 2 && r < 0.62) type = pick(['drifter','scav','miner']);
+    else if(r < 0.17) type = 'drifter';
+    else if(r < 0.31) type = 'scav';
+    else if(r < 0.44) type = 'thief';
+    else if(r < 0.53) type = 'miner';
+    else if(r < 0.62) type = 'smuggler';
+    else if(r < 0.69) type = 'medic';
+    else if(r < 0.75) type = 'clerk';
+    else if(r < 0.80) type = 'officer';
+    else if(r < 0.90) type = 'rebel';
     else type = 'aug';
   }
   const T = TYPES[type];
@@ -1080,6 +1211,7 @@ function genCustomer(){
       fake: Math.random() < (type==='thief'?0.4:0.24)
     });
     c.ask = Math.round(claimVal(c.item) * (type==='thief'?rnd(0.4,0.58):rnd(0.46,0.7)));
+    if(S.job === 'appraiser') c.item.seen[0] = true;
   } else {
     // 预算 = 该品类均价 * 随机系数 * 顾客类型系数
     const catVals = Object.values(DEFS).filter(d=>d.cat===c.needCat).map(d=>d.v);
@@ -1088,6 +1220,8 @@ function genCustomer(){
   }
   if(type === 'aug'){
     c.tells = shuffle(AUG_TELLS.slice()).slice(0,2).concat([pick(GENERIC_TELLS)]);
+  } else if(T.tells){
+    c.tells = shuffle(T.tells.concat(GENERIC_TELLS)).slice(0, ri(1,2));
   } else {
     c.tells = shuffle(GENERIC_TELLS.slice()).slice(0, ri(1,2));
   }
@@ -1120,6 +1254,7 @@ function officerSearch(){
     removeItem(it.uid);
     log(`治安官没收了柜台上的${it.def.n}。`, 'bad');
   });
+  if(S.job === 'exguard') fine = Math.round(fine * 0.6);
   S.credits -= fine;
   S.rep.guard -= 7;
   S.heat = Math.max(0, S.heat - 6);
@@ -1143,7 +1278,7 @@ function startNego(){
     accept: Math.round(ask * rnd(0.6,0.82)),
     offer: Math.round(ask * 0.78),
     min: Math.max(1, Math.round(ask*0.3)), max: Math.round(ask*1.2),
-    counter:null, round:0, patience:100
+    counter:null, round:0, patience:S.wound>0?80:100
   };
   render();
 }
@@ -1158,7 +1293,7 @@ function startSellNego(){
     accept:budget,
     offer,
     min: Math.max(1, Math.round(v*0.35)), max: Math.max(offer, Math.round(v*1.9)),
-    counter:null, round:0, patience:100
+    counter:null, round:0, patience:S.wound>0?80:100
   };
   render();
 }
@@ -1194,7 +1329,8 @@ function finishDeal(){
       log('没有地方放货了，这笔做不成。', 'warn');
       S.nego = null; render(); return;
     }
-    S.credits -= n.offer;
+    const cost = Math.round(n.offer * (S.job==='exguard'?1.06:1));
+    S.credits -= cost;
     it.revealed = true;
     it.price = null;
     if(S.stock.shelf.length < S.caps.shelf) S.stock.shelf.push(it);
@@ -1202,32 +1338,35 @@ function finishDeal(){
     let heat = 0;
     if(it.stolen) heat += 3;
     if(it.def.ill >= 2) heat += 2;
-    S.heat += heat;
+    const effHeat = Math.round(heat * (S.job==='exguard'?0.6:1));
+    S.heat += effHeat;
     if(it.stolen) log('货里带着治安部的封条胶痕——先别上架。', 'warn');
     const truth = it.fake
       ? `<span class="tag fake">赝品</span> 真实价值约 ${money(trueVal(it))}`
       : `<span class="tag real">真品</span> 品相 ${(it.quality*100|0)}%`;
     S.deal = {
       title:'收购完成',
-      text:`你用 ${money(n.offer)} 收下了${it.def.n}。对方把信用点揣进兜里，走得比来时快。`,
+      text:`你用 ${money(cost)} 收下了${it.def.n}。对方把信用点揣进兜里，走得比来时快。`,
       reveal: truth + (it.stolen?' · <span class="tag stolen">赃物</span>':'')
     };
-    log(`买入 ${it.def.n}，支出 ${money(n.offer)}${it.fake?'（赝品）':''}。`, it.fake?'bad':'');
+    log(`买入 ${it.def.n}，支出 ${money(cost)}${it.fake?'（赝品）':''}。`, it.fake?'bad':'');
   } else {
-    S.credits += n.offer;
+    const income = Math.round(n.offer * (S.job==='broker'?1.12:(S.job==='appraiser'?0.95:1)));
+    S.credits += income;
     removeItem(it.uid);
     let heat = 0;
     if(it.def.ill > 0) heat += it.def.ill * 4;
     if(it.stolen) heat += 6;
     if(it.fake && n.offer > trueVal(it)*1.4) heat += 8;
-    S.heat += heat;
+    const effHeat = Math.round(heat * (S.job==='exguard'?0.6:1));
+    S.heat += effHeat;
     const markup = it.fake && n.offer > trueVal(it)*1.4;
     S.deal = {
       title:'成交',
       text:`你把${it.def.n}推过柜台。${markup?'你贴了张假标，价签下的字是用针尖改过的。':'他数出信用点，一张一张推过来。'}`,
-      reveal: `${money(n.offer)} 入账${heat>0?` · <span style="color:#ff9a8f">热度 +${heat}</span>`:''}`
+      reveal: `${money(income)} 入账${effHeat>0?` · <span style="color:#ff9a8f">热度 +${effHeat}</span>`:''}`
     };
-    log(`卖出 ${it.def.n}，收入 ${money(n.offer)}${heat>0?`，热度 +${heat}`:''}。`, heat>0?'warn':'good');
+    log(`卖出 ${it.def.n}，收入 ${money(income)}${effHeat>0?`，热度 +${effHeat}`:''}。`, effHeat>0?'warn':'good');
     if(it.def.ill>0) S.rep.guard = Math.max(0, S.rep.guard - 1);
     if(it.def.ill>0 || it.stolen) S.rep.black += 2;
   }
@@ -1356,56 +1495,400 @@ function nightPhase(){
     <div class="mb">
       <h4>卷帘门落下，站内广播换成了低频嗡鸣。</h4>
       <p>夜里能做一件事。选错不要紧，但房租不会等你。</p>
+      ${S.wound>0?`<p class="small" style="margin-top:8px;color:#ff9a8f">你身上带伤（还需 ${S.wound} 晚恢复），今晚不能外出拾荒。</p>`:''}
       <div class="btn-row" style="margin-top:14px;flex-direction:column;align-items:stretch">
-        <button class="btn" onclick="doNight('scav')">去下层舱段拾荒 <span class="small">— 有货，有风险</span></button>
-        <button class="btn" onclick="doNight('rest')">低调休整 <span class="small">— 热度 −10，治安声望 +2</span></button>
-        <button class="btn" onclick="doNight('fix')">修整柜台 <span class="small">— 柜台容量 +1（上限 6）</span></button>
-        <button class="btn ghost" onclick="doNight('none')">什么都不做 <span class="small">— 稳妥</span></button>
+        ${S.wound>0
+          ? `<button class="btn" disabled>拾荒 · 垃圾倾倒场 <span class="small">— 带伤，不能外出</span></button>`
+          : `<button class="btn" onclick="doNight('scav')">拾荒 · 垃圾倾倒场 <span class="small">— 低成本拿货，可能受伤</span></button>`}
+        <button class="btn" onclick="doNight('fix')">维护机器 <span class="small">— 柜台容量 +1（上限 6）</span></button>
+        <button class="btn" onclick="doNight('market')">黑市接头 <span class="small">— 装备、绷带、压热度</span></button>
+        <button class="btn" onclick="doNight('rest')">休息 <span class="small">— 热度 −10，治安 +2，恢复生命</span></button>
       </div>
     </div>`);
 }
 
 function doNight(kind){
   closeModal();
+  if(kind === 'scav'){ scavPanel(); return; }
+  if(kind === 'market'){ blackMarket(); return; }
   let text = '';
-  if(kind === 'scav'){
-    const n = ri(2,3);
-    const pool = ['scrap','scrap','water_dirty','battery','noodles','bandage','chip','brew','cigarettes','water_pure','meds'];
-    let got = [];
-    for(let i=0;i<n;i++){
-      if(S.stock.store.length >= S.caps.store) break;
-      const it = makeItem(pick(pool), {stolen: Math.random()<0.08});
-      it.revealed = true;
-      S.stock.store.push(it);
-      got.push(it.def.n);
-    }
-    S.heat += 5;
-    const hurt = Math.random() < 0.22;
-    if(hurt){
-      const cost = ri(40,90);
-      S.credits -= cost;
-      text = `通风管里踩空了一脚。你带回了 ${got.join('、')}，但医疗费花掉 ${money(cost)}。`;
-      S.rep.rebel += 1;
-    } else {
-      text = `你在塌了一半的货舱里翻出 ${got.join('、')||'一堆没用的东西'}。热度 +5。`;
-    }
-    log(`夜间拾荒：${got.join('、')||'空手而归'}。`, hurt?'warn':'');
-  } else if(kind === 'rest'){
+  if(kind === 'rest'){
     S.heat = Math.max(0, S.heat - 10);
     S.rep.guard += 2;
-    text = '你关掉招牌灯，煮了壶水，什么也没卖。走廊安静得像没人住。热度 −10。';
-    log('低调休整，热度 −10。', 'good');
+    S.hp = Math.min(100, S.hp + 18);
+    text = '你关掉招牌灯，煮了壶水，什么也没卖。走廊安静得像没人住。<br>热度 −10，治安声望 +2，生命 +18。';
+    log('低调休整，热度 −10，生命 +18。', 'good');
   } else if(kind === 'fix'){
+    S.hp = Math.min(100, S.hp + 6);
     if(S.caps.shelf >= 6){ text = '柜台已经撑到极限了，再加一块板就要塌。'; }
     else { S.caps.shelf++; text = '你把一块废舱门板焊上柜台，多出了一个展示位。柜台容量 +1。'; log('柜台加宽，容量 +1。','good'); }
   } else {
-    text = '你数了两遍钱，然后关灯。';
+    S.hp = Math.min(100, S.hp + 8);
+    text = '你数了两遍钱，然后关灯。生命 +8。';
   }
   modal(`<div class="mh">夜间</div><div class="mb"><p>${text}</p></div>
     <div class="mf"><button class="btn primary" onclick="closeModal();settle()">入睡</button></div>`);
 }
 
+/* ---------- 夜间：拾荒（底层倾倒舱） ---------- */
+function scavPanel(){
+  const torch = S.gear.torch, bag = S.gear.bag, bd = S.gear.bandage;
+  const cap = 3 + (bag ? 3 : 0);
+  modal(`<div class="mh">拾荒 · 底层倾倒舱</div>
+    <div class="mb">
+      <p>底层倾倒舱，废料堆积，管线滴水，有巡逻机器人偶尔路过。</p>
+      <p class="small" style="margin-top:8px">你当前携带：
+        <span style="color:${torch?'#6ee7a0':'#4b5464'}">手电${torch?' ✓':' ✗'}</span> /
+        <span style="color:${bag?'#6ee7a0':'#4b5464'}">帆布背包${bag?' ✓':' ✗'}</span> /
+        <span style="color:${bd>0?'#6ee7a0':'#4b5464'}">绷带 ×${bd}</span>
+      </p>
+      <div class="risk">
+        <div>每翻一堆：轻伤 3%，重伤 0.22%</div>
+        ${torch?'<div class="good">携带手电：轻伤 1.8%，重伤 0.10%</div>':'<div class="bad">没有手电：按基础概率</div>'}
+        <div>翻得越多，撞上的机会越多（翻满 8 堆约轻伤 ${torch?'14':'22'}% / 重伤 ${torch?'0.8':'1.7'}%）</div>
+        <div>体力 8：今晚最多翻 8 堆，翻完只能回店</div>
+        <div>背包容量：${cap} 格${bag?'（帆布背包 +3）':'（没有背包）'}</div>
+        ${bd>0?`<div>绷带 ×${bd}：自动抵消一次轻伤（消耗）`:'<div class="bad">没有绷带：受伤只能硬扛</div>'}
+        <div class="bad">重伤：当场终止、丢掉已装入的货，2~3 晚不能外出</div>
+      </div>
+      <p class="small" style="margin-top:10px">捡到的东西真假不明，回店里点「鉴定」才看得出来。</p>
+    </div>
+    <div class="mf">
+      <button class="btn primary" onclick="startScav()">出发拾荒</button>
+      <button class="btn ghost" onclick="closeModal();nightPhase()">返回</button>
+    </div>`);
+}
+
+function startScav(){
+  S._scavNote = '';
+  if(Math.random() < 0.32){ scavEventPrompt(''); return; }
+  openScavBoard('', []);
+}
+
+/* 每翻一堆判定一次受伤 */
+function scavHurt(){
+  const lightP = S.gear.torch ? 1.8 : 3;
+  const heavyP = S.gear.torch ? 0.10 : 0.22;
+  const roll = Math.random() * 100;
+
+  if(roll < heavyP){
+    const dmg = ri(26,36);
+    S.hp = Math.max(0, S.hp - dmg);
+    S.wound = ri(2,3) + 1;
+    const lostBag = S.scav ? S.scav.bag.length : 0;
+    S.scav = null;
+    log(`拾荒时受了重伤，空手回来（生命 −${dmg}）。`, 'bad');
+    if(S.hp <= 0){
+      gameOver('伤重不治', '你在倾倒舱的管线下面躺了半夜。巡逻机器人发现了你，但它只负责清扫垃圾。');
+      return true;
+    }
+    modal(`<div class="mh">拾荒失败 · 重伤</div><div class="mb">
+      <h4>一根断裂的液压杆从废料堆里翻下来</h4>
+      <p>你躲开了要害，但左腿立刻不听使唤。你丢下背包，一路爬回柜台。</p>
+      <div class="kv">
+        <span>生命</span><span class="neg">−${dmg}</span>
+        <span>状态</span><span class="neg">伤势：${S.wound} 晚内不能外出拾荒</span>
+        ${lostBag?`<span>丢失</span><span class="neg">背包里的 ${lostBag} 件货</span>`:''}
+      </div>
+      <p class="small" style="margin-top:10px">带伤营业：鉴定可能看走眼，议价更容易崩。</p>
+    </div><div class="mf"><button class="btn primary" onclick="closeModal();settle()">回当铺</button></div>`);
+    return true;
+  }
+
+  if(roll < heavyP + lightP){
+    if(S.gear.bandage > 0){
+      S.gear.bandage--;
+      log('用绷带抵消了一次轻伤。', 'warn');
+      toast('锈钉划开了手背，绷带压住伤口（绷带 −1）。');
+    } else {
+      const dmg = ri(2,5);
+      S.hp = Math.max(0, S.hp - dmg);
+      log(`拾荒轻伤，生命 −${dmg}。`, 'warn');
+      toast(`翻找时被划伤，生命 −${dmg}。`);
+      if(S.hp <= 0){
+        gameOver('伤重不治', '伤口没人处理，你在废料堆旁边坐下，就再也没站起来。');
+        return true;
+      }
+    }
+    render();
+  }
+  return false;
+}
+
+function scavEventPrompt(note){
+  modal(`<div class="mh">拾荒 · 意外发现</div><div class="mb">
+    <h4>废料堆深处传来微弱的机械嗡鸣</h4>
+    <p>一台休眠的巡逻机器人埋在垃圾里，外壳还连着半截供电管。它的传感器偶尔闪一下。</p>
+    <div class="risk">
+      <div class="good">绕过它：安全，继续翻找，顺手带走一块电池</div>
+      <div class="bad">拆解它：55% 拿到电路板 / 30% 轻伤 + 电路板 / 15% 重伤并终止</div>
+    </div>
+  </div><div class="mf">
+    <button class="btn" onclick="scavEvent('avoid')">悄悄绕开</button>
+    <button class="btn primary" onclick="scavEvent('dismantle')">拆了它</button>
+  </div>`);
+}
+
+function scavEvent(kind){
+  const note = S._scavNote || '';
+  if(kind === 'avoid'){
+    openScavBoard(note + '<br>你绕开了那台机器人。它在你身后嗡鸣了一声，没有醒来。', ['battery']);
+    return;
+  }
+  const r = Math.random();
+  if(r < 0.55){
+    openScavBoard(note + '<br>你拆下了它的主板和两块电池，线圈还在发烫。', ['chip','battery']);
+  } else if(r < 0.85){
+    const dmg = ri(6,12);
+    S.hp -= dmg;
+    log(`拆解机器人时被电了一下，生命 −${dmg}。`, 'warn');
+    if(S.hp <= 0){
+      S.hp = 0;
+      gameOver('伤重不治', '电容的余电顺着手指窜进胸口。你倒在废料堆里，很久没人发现。');
+      return;
+    }
+    openScavBoard(note + `<br>拆到一半被电容电了一下，生命 −${dmg}，但主板到手了。`, ['chip']);
+  } else {
+    const dmg = ri(26,36);
+    S.hp -= dmg;
+    S.wound = ri(2,3) + 1;
+    log(`机器人短路爆开，重伤（生命 −${dmg}）。`, 'bad');
+    if(S.hp <= 0){
+      S.hp = 0;
+      gameOver('伤重不治', '机器人的外壳在你面前炸开。你带回了一身弹片，没带回任何东西。');
+      return;
+    }
+    modal(`<div class="mh">拾荒失败 · 重伤</div><div class="mb">
+      <h4>机器人短路爆开</h4>
+      <p>弹片划开你的手臂，供电管炸成一团蓝火。你什么都没拿，直接往回爬。</p>
+      <div class="kv">
+        <span>生命</span><span class="neg">−${dmg}</span>
+        <span>状态</span><span class="neg">伤势：${S.wound} 晚内不能外出拾荒</span>
+      </div>
+    </div><div class="mf"><button class="btn primary" onclick="closeModal();settle()">回当铺</button></div>`);
+  }
+}
+
+function makeLoot(forceId){
+  let id = forceId, sus = false;
+  if(!id){
+    const r = Math.random();
+    if(r < 0.56) id = pick(['scrap','scrap','scrap','water_dirty']);
+    else if(r < 0.89) id = pick(['bandage','water_pure','noodles','battery','tool','cigarettes','meds','brew','scrap']);
+    else { id = pick(['chip','idcard','stim','weapon','ghost','contraband','chip','meds']); sus = true; }
+  }
+  const it = makeItem(id, {
+    fake: Math.random() < (sus ? 0.5 : 0.08),
+    stolen: Math.random() < (sus ? 0.25 : 0.05)
+  });
+  it.susp = sus;
+  it.revealed = !sus;
+  if(!sus) it.price = Math.round(claimVal(it));
+  return it;
+}
+
+const PILE_LABELS = [
+  '潮湿的泡沫箱','压扁的食品柜','断裂的舱壁板','缠着电缆的塑料袋',
+  '半开的工具箱','堆叠的饮料罐','烧焦的电路堆','卷起的防水布',
+  '断腿的机械臂','溢出的医疗废料桶','锈蚀的通风管段','压在最底下的纸箱',
+  '一只没有盖的金属箱','被撕开的快递包'
+];
+
+function openScavBoard(note, extraIds){
+  const cap = 3 + (S.gear.bag ? 3 : 0);
+  const piles = [];
+  for(let i=0;i<12;i++){
+    piles.push({
+      label: pick(PILE_LABELS),
+      open: false,
+      taken: false,
+      item: Math.random() < 0.12 ? null : makeLoot()
+    });
+  }
+  S.scav = { note: note || '', cap, bag: [], piles, lostExtra: 0, stamina: 8, staminaMax: 8 };
+  (extraIds || []).forEach(id=>{
+    const it = makeLoot(id);
+    if(S.scav.bag.length < cap) S.scav.bag.push(it);
+    else S.scav.lostExtra++;
+  });
+  renderScavBoard();
+}
+
+function renderScavBoard(){
+  const sc = S.scav;
+  if(!sc) return;
+  const opened = sc.piles.filter(p=>p.open && p.item).length;
+  const n = sc.bag.length;
+
+  modal(`<div class="mh">拾荒 · 底层倾倒舱</div>
+    <div class="mb">
+      ${sc.note?`<p class="small" style="margin-bottom:10px">${sc.note}</p>`:''}
+      ${sc.lostExtra?`<p class="small" style="color:#ff9a8f;margin-bottom:10px">背包塞不下，另有 ${sc.lostExtra} 件东西只能丢在原地。</p>`:''}
+      <div class="bagbar">
+        <div class="bagbar-h"><span>背包</span><b>${n} / ${sc.cap}</b><span>装满就带不走更多</span></div>
+        <div class="bagslots">
+          ${Array.from({length:sc.cap},(_,i)=>{
+            const it = sc.bag[i];
+            return it
+              ? `<button class="bagitem" onclick="unbag(${i})" title="放回废物堆">${it.def.n}<span>×</span></button>`
+              : `<div class="bagitem empty">空</div>`;
+          }).join('')}
+        </div>
+        <div class="bagbar-h" style="margin-top:9px;letter-spacing:0">
+          <span>生命 <b style="color:${S.hp<40?'#ff9a8f':'#e6f0ff'};font-size:11px">${S.hp}</b></span>
+          <span>体力 <b style="color:${sc.stamina?'#ffbe4d':'#ff9a8f'};font-size:11px">${sc.stamina} / ${sc.staminaMax}</b></span>
+          <span>绷带 ×${S.gear.bandage}</span>
+          <span>手电 ${S.gear.torch?'✓':'✗'}</span>
+        </div>
+      </div>
+      ${sc.stamina ? '' : '<p class="small" style="margin-top:10px;color:#ff9a8f">体力耗尽，翻不动了，只能回当铺。</p>'}
+      <p class="small" style="margin-top:12px">废料堆 · 每翻一堆 −1 体力（已翻 ${opened} 堆）</p>
+      <div class="piles">
+        ${sc.piles.map((p,i)=>{
+          if(!p.open){
+            return `<button class="pile" ${sc.stamina?'':'disabled'} onclick="openPile(${i})">
+              <span class="q">?</span><span class="pl">${p.label}</span>
+              <span class="pa">${sc.stamina?'翻开':'没力气'}</span></button>`;
+          }
+          if(!p.item){
+            return `<div class="pile empty"><span class="q">·</span>
+              <span class="pl">${p.label}</span><span class="pa">空的</span></div>`;
+          }
+          return `<div class="pile open${p.taken?' taken':''}">
+            ${pix(p.item.def.shape, p.item.def.pal)}
+            <div class="pi">
+              <div class="pn">${p.item.def.n}</div>
+              <div class="pv">${p.item.susp?'<span class="tag sus">可疑 · 未鉴定</span>'
+                :`约 ${money(claimVal(p.item))}`}</div>
+            </div>
+            ${p.taken?'<span class="pa">已装包</span>'
+              :`<button class="take" onclick="takePile(${i})">装进背包</button>`}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn primary" onclick="finishScav()">回当铺 · 带回 ${n} 件</button>
+    </div>`);
+}
+
+function openPile(i){
+  const sc = S.scav;
+  const p = sc && sc.piles[i];
+  if(!p || p.open) return;
+  if(sc.stamina <= 0){ toast('体力耗尽了，翻不动了。'); return; }
+  sc.stamina--;
+  p.open = true;
+  if(scavHurt()) return;
+  renderScavBoard();
+}
+
+function takePile(i){
+  const p = S.scav && S.scav.piles[i];
+  if(!p || !p.item || p.taken) return;
+  if(S.scav.bag.length >= S.scav.cap){ toast('背包满了，先放回一件再装。'); return; }
+  S.scav.bag.push(p.item);
+  p.taken = true;
+  renderScavBoard();
+}
+
+function unbag(i){
+  const sc = S.scav;
+  if(!sc) return;
+  const it = sc.bag[i];
+  if(!it) return;
+  sc.bag.splice(i,1);
+  const p = sc.piles.find(x=>x.item === it);
+  if(p) p.taken = false;
+  renderScavBoard();
+}
+
+function finishScav(){
+  const sc = S.scav;
+  if(!sc){ closeModal(); settle(); return; }
+  const kept = sc.bag;
+  const leftCount = sc.piles.filter(p=>p.open && p.item && !p.taken).length;
+  const unopened = sc.piles.filter(p=>!p.open).length;
+
+  let stashed = 0, lost = 0, heatGain = 0;
+  kept.forEach(it=>{
+    if(S.stock.store.length < S.caps.store) S.stock.store.push(it);
+    else if(S.stock.shelf.length < S.caps.shelf) S.stock.shelf.push(it);
+    else if(S.stock.hidden.length < S.caps.hidden) S.stock.hidden.push(it);
+    else { lost++; return; }
+    stashed++;
+    if(it.stolen) heatGain += 3;
+    else if(it.def.ill >= 3) heatGain += 3;
+  });
+  S.heat += heatGain;
+  const susCount = kept.filter(i=>i.susp).length;
+  log(`拾荒带回 ${stashed} 件（可疑 ${susCount} 件）${heatGain?`，热度 +${heatGain}`:''}。`, heatGain?'warn':'');
+  S.scav = null;
+
+  modal(`<div class="mh">拾荒归来</div><div class="mb">
+    <h4>底层倾倒舱的滴水声终于被你甩在身后</h4>
+    ${sc.note?`<p>${sc.note}</p>`:''}
+    ${kept.length
+      ? `<p class="small" style="margin-top:10px">带回来的东西（${kept.length} 件）</p>
+        <ul class="loot">
+          ${kept.map(it=>`<li><span>${it.def.n}</span>
+            ${it.susp?'<span class="tag sus">可疑 · 未鉴定</span>'
+                   :`<span class="small">${it.fake?'赝品':'约 '+money(claimVal(it))}${it.stolen?' · 赃物':''}</span>`}</li>`).join('')}
+        </ul>`
+      : `<p style="margin-top:10px;color:#8b98a9">你两手空空地回来了。背包一格都没装满。</p>`}
+    ${leftCount?`<p class="small" style="margin-top:8px">还有 ${leftCount} 件翻出来没装走的，留在原地了。</p>`:''}
+    ${unopened?`<p class="small">还有 ${unopened} 堆没翻，留在了原地。</p>`:''}
+    ${lost?`<p class="small">仓库和柜台都没位置，另有 ${lost} 件只能扔在门口。</p>`:''}
+    ${heatGain?`<p class="small" style="color:#ff9a8f">里面带追踪标记的货：热度 +${heatGain}。</p>`:''}
+    ${susCount?`<p class="small" style="margin-top:8px">可疑物品的真假，要回店里点「鉴定」才看得出来。</p>`:''}
+  </div><div class="mf"><button class="btn primary" onclick="closeModal();settle()">回当铺 · 入睡</button></div>`);
+}
+
+/* ---------- 夜间：黑市接头 ---------- */
+function blackMarket(){
+  const canBag = !S.gear.bag && S.credits >= 120;
+  const canBd = S.gear.bandage < 3 && S.credits >= 30;
+  const canCalm = S.credits >= 60 && S.heat >= 5;
+  modal(`<div class="mh">黑市接头 · CONTACT</div>
+    <div class="mb">
+      <p>接头点在货梯后面。一个不说话的人守着两只箱子，只收现钱，不赊账。</p>
+      <div class="kv" style="margin-top:12px">
+        <span>现钱</span><span>${money(S.credits)}</span>
+        <span>帆布背包</span><span>${S.gear.bag?'已拥有':'₡120 · 携带 +3 格'}</span>
+        <span>绷带</span><span>${S.gear.bandage} / 3 · ₡30 一卷</span>
+        <span>买平安</span><span>₡60 · 热度 −8</span>
+      </div>
+      <div class="btn-row" style="margin-top:14px;flex-direction:column;align-items:stretch">
+        <button class="btn" ${canBag?'':'disabled'} onclick="buyGear('bag')">买帆布背包 ₡120</button>
+        <button class="btn" ${canBd?'':'disabled'} onclick="buyGear('bandage')">买绷带 ₡30</button>
+        <button class="btn" ${canCalm?'':'disabled'} onclick="buyGear('calm')">买平安 ₡60（热度 −8）</button>
+      </div>
+    </div>
+    <div class="mf"><button class="btn ghost" onclick="closeModal();nightPhase()">离开</button></div>`);
+}
+function buyGear(kind){
+  if(kind === 'bag'){
+    if(S.gear.bag || S.credits < 120) return;
+    S.credits -= 120; S.gear.bag = true;
+    log('从黑市买到帆布背包（携带 +3 格）。', 'good');
+  } else if(kind === 'bandage'){
+    if(S.gear.bandage >= 3 || S.credits < 30) return;
+    S.credits -= 30; S.gear.bandage++;
+    log('从黑市买到一卷绷带。', 'good');
+  } else if(kind === 'calm'){
+    if(S.credits < 60) return;
+    S.credits -= 60;
+    S.heat = Math.max(0, S.heat - 8);
+    S.rep.black += 2;
+    log('黑市帮你压下了热度 −8。', 'sys');
+  }
+  S.rep.black += 1;
+  blackMarket();
+}
+
 function settle(){
+  if(S.wound > 0) S.wound--;
+  S.hp = Math.min(100, S.hp + 4);
   // 房租
   if(S.day >= S.nextRentDay){
     const amt = RENTS[Math.min(S.rentWeeks, RENTS.length-1)];
@@ -1450,6 +1933,7 @@ function doRaid(){
     removeItem(it.uid);
   });
   fine = Math.min(fine, 320);
+  if(S.job === 'exguard') fine = Math.round(fine * 0.6);
   S.credits -= fine;
   S.rep.guard -= 6;
   S.heat = Math.max(0, S.heat - 18);
@@ -1534,6 +2018,7 @@ function help(){
       <h4>你是这间当铺的老板</h4>
       <p>目标：在房租把你压死之前，攒够 ${money(S.target)} 买下店铺。</p>
       <ul>
+        <li><b>身份</b>：开局三选一——鉴定师（自动看清 1 条线索）、掮客（卖价 +12%）、前治安官（热度与罚款大减）。</li>
         <li><b>接待</b>：每位顾客不是来卖货，就是来买货。卖货的人会虚报价值，买货的人有预算上限。</li>
         <li><b>鉴定</b>：点击「色卡比对 / 印刷字口 / 防伪标 / 封装压痕」翻开线索，再决定出价。赝品真实价值只有一成。</li>
         <li><b>议价</b>：出价低于对方底线会被还价，每次还价消耗耐心，耐心见底人就走了。</li>
@@ -1541,7 +2026,7 @@ function help(){
         <li><b>热度</b>：卖违禁品、赃物、贴假标都会涨热度。热度越高，突击检查越频繁。</li>
         <li><b>暗格</b>：搜查只翻柜台和仓库，暗格永远不会被打开。违禁品请务必藏进去。</li>
         <li><b>巡查日</b>：晨报会提前警告。那天别把违禁品摆在柜台上。</li>
-        <li><b>闭店</b>：每天夜里可以拾荒、休整或修柜台，然后结算房租。</li>
+        <li><b>闭店</b>：夜里可以拾荒、维护机器、黑市接头或休息，然后结算房租。拾荒要手动翻废料堆：体力 8 点、每翻一堆扣 1 点且判定一次受伤，按背包容量逐件挑选（手电降低受伤、帆布背包 +3 格、绷带抵消一次轻伤）。重伤会让你 2~3 晚不能外出。</li>
       </ul>
     </div>
     <div class="mf"><button class="btn primary" onclick="closeModal()">${S.day===0?'知道了':'返回柜台'}</button></div>`);
@@ -1638,6 +2123,7 @@ function saveGame(quiet){
   try{
     const data = {
       v:3, day:S.day, credits:S.credits, heat:S.heat, target:S.target,
+      job:S.job, hp:S.hp, wound:S.wound, gear:S.gear,
       rep:S.rep, caps:S.caps, market:S.market,
       inspectDay:S.inspectDay, officerDone:S.officerDone,
       queue:S.queue, served:S.served,
@@ -1660,6 +2146,10 @@ function loadGame(){
   if(!d) return false;
   S.day = d.day; S.credits = d.credits; S.heat = d.heat;
   S.target = d.target || 1000;
+  S.job = JOBS[d.job] ? d.job : 'appraiser';
+  S.hp = d.hp ?? 100;
+  S.wound = d.wound || 0;
+  S.gear = d.gear || {torch:true, bag:false, bandage:1};
   S.rep = d.rep; S.caps = d.caps; S.market = d.market || {};
   S.inspectDay = !!d.inspectDay; S.officerDone = !!d.officerDone;
   S.queue = d.queue; S.served = d.served;
@@ -1680,6 +2170,9 @@ function manualSave(){ saveGame(false); }
 
 function resetState(){
   S.day = 0; S.credits = 220; S.heat = 12; S.target = 1000;
+  S.job = 'appraiser';
+  S.hp = 100; S.wound = 0;
+  S.gear = {torch:true, bag:false, bandage:1};
   S.rep = {guard:50, rebel:40, black:35};
   S.stock = {shelf:[], store:[], hidden:[]};
   S.caps = {shelf:4, store:14, hidden:3};
@@ -1706,8 +2199,8 @@ function showTitle(){
     <div class="t-glow"></div>
     <div class="title-inner">
       <div class="t-kicker">DECK-7 · UNIT 14 · PAWN &amp; EXCHANGE</div>
-      <div class="t-name">深空当铺</div>
-      <div class="t-sub">PROBABLY STOLEN</div>
+      <div class="t-name">星港当铺</div>
+      <div class="t-sub">STARLANE PAWN</div>
       <div class="t-rule"></div>
       <div class="t-line">空间站最底层，卷帘门后只有一张柜台、一盏紫外灯，<br>和一台会漏电的验货台。</div>
       <div class="t-menu">
@@ -1724,16 +2217,43 @@ function newGame(){
     modal(`<div class="mh">开始新的一局</div><div class="mb">
       <p>上一局的存档会被覆盖。</p></div>
       <div class="mf">
-        <button class="btn danger" onclick="closeModal();beginRun()">覆盖并开始</button>
+        <button class="btn danger" onclick="closeModal();chooseJob()">覆盖并开始</button>
         <button class="btn ghost" onclick="closeModal()">取消</button>
       </div>`);
     return;
   }
-  beginRun();
+  chooseJob();
 }
-function beginRun(){
+function chooseJob(){
+  const cards = ['appraiser','broker','exguard'].map(k=>{
+    const j = JOBS[k];
+    return `<button class="jobcard" onclick="pickJob('${k}')">
+      <div class="job-h"><b>${j.name}</b><span>起始 ${money(j.credits)}</span></div>
+      <div class="job-tag">${j.tag}</div>
+      <div class="job-d">${j.desc}</div>
+    </button>`;
+  }).join('');
+  modal(`<div class="mh">选择身份 · WHO ARE YOU</div>
+    <div class="mb">
+      <p class="small">这间铺子以前死过人。你用什么身份接手，决定了你怎么活下去。</p>
+      <div class="jobs">${cards}</div>
+    </div>`);
+}
+function pickJob(k){
+  closeModal();
+  beginRun(k);
+}
+function beginRun(job){
   resetState();
   clearSave();
+  S.job = job || 'appraiser';
+  const J = JOBS[S.job] || JOBS.appraiser;
+  S.credits = J.credits;
+  if(S.job === 'exguard'){
+    S.rep.guard += 8;
+    S.rep.black = Math.max(0, S.rep.black - 15);
+  }
+  if(S.job === 'broker') S.rep.black += 5;
   ['water_pure','bandage','cigarettes'].forEach(k=>{
     const it = makeItem(k, {fake:false, stolen:false});
     it.revealed = true;
@@ -1743,7 +2263,7 @@ function beginRun(){
   const scrap = makeItem('scrap', {fake:false, stolen:false});
   scrap.revealed = true;
   S.stock.store.push(scrap);
-  log('你接手了第十四号铺位，欠着房东一笔钱。', 'sys');
+  log(`以「${J.name}」的身份接手了第十四号铺位。`, 'sys');
   const t = $('#title-screen');
   t.classList.remove('on');
   t.innerHTML = '';
